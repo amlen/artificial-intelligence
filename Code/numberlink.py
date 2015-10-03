@@ -14,41 +14,71 @@ class NumberLink(Problem):
         self.width =  0
         self.height = 0
         with open(init, "r") as file:
+            # Lecture du fichier
             data_read = file.read()
             self.initial = data_read
+
+            # Création d'un tableau équivalent au problème
             self.grid = data_read.split("\n")
             self.grid.pop()
             self.width=len(self.grid[0])
             self.height=len(self.grid)
             print("Nombre de colonnes = " + repr(self.width))
             print("Nombre de lignes = " + repr(self.height))
-            self.initial += "0,0,A"
-            print(repr(self.grid))
+
+            # Création de la première action (identique
+            # au placement d'une lettre sur le tableau)
+            self.initial += seekLetter(self.initial)
+            print("initial" + repr(self.initial))
+            print("initial grid = " +repr(self.grid))
             start = [0, 0]
             end = [0, 4]
             print(pathExists(self.grid, start, end))
 
     def goal_test(self, state):
-        state.pop()
-        for lines in state:
-            if lines.count(".") > 0:
+        state = state[0:self.width*self.height-1]
+        if state.count(".") > 0:
                 return False
         return True
 
     def successor(self, state):
-        newstate = state
-        action = newstate.pop().split(",")
-        if (action[0] == "None"):
-            action=seekLetter(newstate).split(",")
+        grid = self.stateToGrid(state)
+        action = grid.pop().split(",")
         for d in directions:
             i = int(action[0]) + d[0]
             j = int(action[1]) + d[1]
-            if i>=0 and j>=0 and i < self.width and j < self.height:
-                line = newstate[i]
+            if i>=0 and j>=0 and i < self.width and j < self.height and not grid[i][j]=='.':
+                line = grid[i]
                 newline = line[:j] + action[2] + line[j+1:]
-                newstate[i] = newline
-                newstate.append(repr(i) +","+ repr(j) +","+repr(action[2]))
-                yield newstate
+                grid[i] = newline
+                yield (repr(i) + "," + repr(j) + "," + repr(action[2]),
+                       self.gridToState(grid))
+
+    def gridToState(self, grid):
+        state = ""
+        for line in grid:
+            state += line
+        return state
+
+    def stateToGrid(self, state):
+        # Creation du grid
+        grid = []
+        visitedLines = 0
+        state = state.replace("\n", "")
+        action = object()
+        for i in range(0, len(state), self.width):
+            if i < self.width:
+                grid.append(state[0:self.width])
+            else:
+                grid.append(state[i:i+self.width])
+            visitedLines += 1
+            if (visitedLines == self.height):
+                action = state[i+self.width:]
+                break
+        print("ACTION=" + repr(action))
+        grid.append(action)
+        return grid
+
 
 ######################
 # Auxiliary function #
@@ -56,29 +86,6 @@ class NumberLink(Problem):
 
 directions = [ [-1, 0], [1, 0], [0, -1], [0, 1] ]
 
-def gridToState(grid):
-    state = ""
-    for line in grid:
-        state += line
-    return state
-
-def stateToGrid(state):
-    # Creation du grid
-    grid = []
-    visitedLines = 0
-    state = state.replace("\n", "")
-    action = object()
-    for i in range(0, len(state), self.width):
-        if i < self.width:
-            grid.append(state[0:self.width])
-        else:
-            grid.append(state[i:i+self.width])
-        visitedLines += 1
-        if (visitedLines == self.height):
-            action = state[i+self.width:].split(",")
-            break
-    grid += action
-    return grid
 def seekLetter(state):
     j = 0
     for line in state:
@@ -116,7 +123,8 @@ def inBounds(grid, pos):
 
 problem=NumberLink(sys.argv[1])
 #problem.successor(problem.initial)
-print(problem.stateToGrid(problem.initial))
+for i in problem.successor(problem.initial):
+    print(repr(i))
 #example of bfs search
 ###node=depth_first_graph_search(problem)
 #example of print
