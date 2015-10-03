@@ -1,0 +1,58 @@
+\section{Python AIMA}
+
+\begin{enumerate}
+    \item In order to perform a search, what are the classes that you
+        must define or extend? Explain precisely why and where they are
+        used inside a tree\_search.
+    \item In the expand method of the class Node what is the advantage
+        of using a yield instead of building a list and returning it
+        afterwards ?
+    \item Both breadth\_first\_graph\_search and depth\_first\_graph\_search
+        are making a call to the same function. How is their fundamental
+        difference implemented?
+    \item What is the difference between the implementation of the
+        graph\_search and the tree\_search methods and how does it impact
+        the search methods ?
+    \item What kind of structure is used to implement the closed list?
+        What are the methods involved in the search of an element inside
+        it? What properties must thus have the elements that you can put
+        inside the closed list ?
+    \item How technically can you use the implementation of the closed
+        list to deal with symmetrical states ? (hint: if two symmetrical
+        states are considered by the algorithm to be the same, they will
+        not be visited twice)
+\end{enumerate}
+
+\section{The Numberlink Problem}
+
+\begin{enumerate}
+    \item Explain the advantages and weaknesses of the following search
+        strategies on this problem (not in general): depth first,
+        breadth first.
+    \item How can we exploit the uniqueness of solution to reduce the
+        search space? Why is the method pathExists useful ?
+    \item Is the order in which we choose the paths important? How can
+        we use this to reduce the search space? When starting a new
+        path, we can choose to start with any of its two endpoint. How
+        should this choice be done ?
+    \item What are the advantages and disadvantages of using the tree
+        and graph search for this problem. Which approach would you
+        choose? Which approach allows you to avoid expending twice
+        symmetrical states ?
+    \item Implement this problem in Python 3. Extend the Problem class
+        and implement the necessary methods and other class(es) if
+        necessary. Your file must be named numberlink.py. You program
+        must take as only input the path to the init file of the problem
+        to solve. It must print to the standard output a solution to the
+        problem satisfying the above format. Your file must be encoded
+        in utf-8. Submit your program on INGInious.
+    \item Experiments must be realized with the 10 instances of the
+        numberlink problem provided. Report in a table the results on
+        the 10 instances for depth-first and breadth- first strategies
+        on both tree and graph search (4 settings). You must report the
+        time, the number of explored nodes and the number of steps from
+        root to solution. When no solution can be found by a strategy in
+        a reasonable time (3 min), explain the reason (time-out and/or
+        swap of the memory). What do you conclude from those experiments
+        ?
+\end{enumerate}
