@@ -44,15 +44,17 @@ class NumberLink(Problem):
     def successor(self, state):
         grid = self.stateToGrid(state)
         action = grid.pop().split(",")
+        print("OLD ACTION =" + repr(action))
         for d in directions:
             i = int(action[0]) + d[0]
             j = int(action[1]) + d[1]
-            if i>=0 and j>=0 and i < self.width and j < self.height and not grid[i][j]=='.':
-                line = grid[i]
-                newline = line[:j] + action[2] + line[j+1:]
-                grid[i] = newline
-                yield (repr(i) + "," + repr(j) + "," + repr(action[2]),
-                       self.gridToState(grid))
+            if i>=0 and j>=0 and i < self.width and j < self.height and grid[j][i]=='.':
+                print("YIELDING : " + action[2] + " in (" + repr(i) + "," +
+                      repr(j) + ")")
+                line = grid[j]
+                newline = line[:i] + action[2] + line[i+1:]
+                grid[j] = newline
+                yield (repr(i) + "," + repr(j) + "," + action[2], self.gridToState(grid))
 
     def gridToState(self, grid):
         state = ""
@@ -66,6 +68,7 @@ class NumberLink(Problem):
         visitedLines = 0
         state = state.replace("\n", "")
         action = object()
+        print("STATE in gridToState = " + state)
         for i in range(0, len(state), self.width):
             if i < self.width:
                 grid.append(state[0:self.width])
@@ -79,6 +82,11 @@ class NumberLink(Problem):
         grid.append(action)
         return grid
 
+    def printState(self, state):
+        for i in range(0, self.height):
+            print(state[(i*self.width):(i+1)*self.width])
+
+
 
 ######################
 # Auxiliary function #
@@ -91,7 +99,7 @@ def seekLetter(state):
     for line in state:
         for i in range(0 , len(line)):
             if not line[i]=='.':
-                return repr(j) + ","+ repr(i) + ","+state[i][j]
+                return repr(j) + "," + repr(i) + "," + state[i][j]
         j += 1
 
 def pathExists(grid, start, end):
@@ -114,17 +122,25 @@ def pathExistsDFS(grid, start, end, visited):
 	return False
 
 def inBounds(grid, pos):
-  return 0 <= pos[0] and pos[0] < len(grid) and 0 <= pos[1] and pos[1] < len(grid[0])
+    return 0 <= pos[0] and pos[0] < len(grid) and 0 <= pos[1] and pos[1] < len(grid[0])
 
 #####################
 # Launch the search #
 #####################
 
 
+
 problem=NumberLink(sys.argv[1])
 #problem.successor(problem.initial)
 for i in problem.successor(problem.initial):
-    print(repr(i))
+    print("i[1]=" + i[1])
+    problem.printState(i[1])
+    for j in problem.successor(i[1]+i[0]):
+        print("Second nodes")
+        problem.printState(j[1])
+        for k in problem.successor(j[1]+j[0]):
+            print("Third nodes")
+            problem.printState(k[1])
 #example of bfs search
 ###node=depth_first_graph_search(problem)
 #example of print
