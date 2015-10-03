@@ -49,28 +49,6 @@ class NumberLink(Problem):
                 newstate[i] = newline
                 newstate.append(repr(i) +","+ repr(j) +","+repr(action[2]))
                 yield newstate
-    def gridToState(grid):
-
-    def stateToGrid(state):
-        # Creation du grid
-        grid = []
-        visitedLines = 0
-        state = state.replace("\n", "")
-        action = object()
-        print("START")
-        for i in range(0, len(state), self.width):
-            if i < self.width:
-                grid.append(state[0:self.width])
-            else:
-                grid.append(state[i:i+self.width])
-            visitedLines += 1
-            if (visitedLines == self.height):
-                action = state[i+self.width:].split(",")
-                break
-        print("FINISH")
-        print("GRID = " + repr(grid))
-        print("Action= " + repr(action))
-
 
 ######################
 # Auxiliary function #
@@ -78,6 +56,29 @@ class NumberLink(Problem):
 
 directions = [ [-1, 0], [1, 0], [0, -1], [0, 1] ]
 
+def gridToState(grid):
+    state = ""
+    for line in grid:
+        state += line
+    return state
+
+def stateToGrid(state):
+    # Creation du grid
+    grid = []
+    visitedLines = 0
+    state = state.replace("\n", "")
+    action = object()
+    for i in range(0, len(state), self.width):
+        if i < self.width:
+            grid.append(state[0:self.width])
+        else:
+            grid.append(state[i:i+self.width])
+        visitedLines += 1
+        if (visitedLines == self.height):
+            action = state[i+self.width:].split(",")
+            break
+    grid += action
+    return grid
 def seekLetter(state):
     j = 0
     for line in state:
@@ -114,7 +115,8 @@ def inBounds(grid, pos):
 
 
 problem=NumberLink(sys.argv[1])
-problem.successor(problem.initial)
+#problem.successor(problem.initial)
+print(problem.stateToGrid(problem.initial))
 #example of bfs search
 ###node=depth_first_graph_search(problem)
 #example of print
