@@ -40,6 +40,7 @@ class NumberLink(Problem):
 
             # Création de la première action (identique
             # au placement d'une lettre sur le tableau)
+            self.initial = self.initial.replace("\n", "")
             self.initial += seekLetter(self.initial)
             print("initial" + repr(self.initial))
             print("initial grid = " +repr(self.grid))
@@ -56,21 +57,49 @@ class NumberLink(Problem):
     def successor(self, state):
         grid = self.stateToGrid(state)
         action = grid.pop().split(",")
-        print("OLD ACTION =" + repr(action))
-        if self.pathIsComplete(state, action[2]):
-            print("##########TERMINE############")
-        for d in directions:
-            i = int(action[0]) + d[0]
-            j = int(action[1]) + d[1]
-            if i>=0 and j>=0 and i < self.width and j < self.height and grid[j][i]=='.':
-                print("YIELDING : " + action[2] + " in (" + repr(i) + "," +
-                      repr(j) + ")")
-                line = grid[j]
-                newline = line[:i] + action[2] + line[i+1:]
-                grid[j] = newline
-                yield (repr(i) + "," + repr(j) + "," + action[2],
-                        self.gridToState(grid) + repr(i) + "," + repr(j)
-                        + "," + action[2])
+        print("Grid : \n" +repr(grid))
+        print("Action : \n" + repr(action))
+        stateIsViable = True
+        pathsAlreadyDone = {}
+        # Verification que l'état est viable :
+        for letter, pos in self.lettersTab.items():
+            #print("Successor on letter : " + letter)
+            # Si le path pour la lettre est déjà créé :
+            if pathExists(grid, [pos[1], pos[0]], [pos[3], pos[2]], letter):
+                #print("Le path de " + letter + " est fini")
+                pathsAlreadyDone[letter] = True
+            # Si le path pour la lettre peut exister :
+            elif pathExists(grid, [pos[1], pos[0]], [pos[3], pos[2]]):
+                print("Le path pour " + letter + " existe toujours")
+            # Si le path est en cours de construction :
+            elif letter==action[2] and pathExists(grid, [int(action[1]), int(action[0])], [pos[3],pos[2]]):
+                print("Le path pour " + letter + " est en cours de construction")
+            else:
+                print("L'état n'est plus viable pour " + letter)
+                stateIsViable=False
+        if stateIsViable:
+            #print("Création d'un state viable")
+            letterToAdd = action[2]
+            for letter, pos in self.lettersTab.items():
+                if letterToAdd in pathsAlreadyDone:
+                    letterToAdd=letter
+                    action[0]=pos[0]
+                    action[1]=pos[1]
+                if letterToAdd not in pathsAlreadyDone:
+                    for d in directions:
+                        i = int(action[0]) + d[0]
+                        j = int(action[1]) + d[1]
+                        next = [j, i]
+                        if inBounds(grid, next) and grid[j][i] == ".":
+                            line = grid[j]
+                            newline = line[:i] + letterToAdd + line[i+1:]
+                            grid[j] = newline
+                            yield (repr(i) + "," + repr(j) + "," +
+                                    letterToAdd, self.gridToState(grid) +
+                                    repr(i) + "," + repr(j) + "," +
+                                    letterToAdd)
+        else:
+            return None
 
     def gridToState(self, grid):
         state = ""
@@ -84,7 +113,7 @@ class NumberLink(Problem):
         visitedLines = 0
         state = state.replace("\n", "")
         action = object()
-        print("STATE in gridToState = " + state)
+        #print("STATE in gridToState = " + state)
         for i in range(0, len(state), self.width):
             if i < self.width:
                 grid.append(state[0:self.width])
@@ -94,34 +123,13 @@ class NumberLink(Problem):
             if (visitedLines == self.height):
                 action = state[i+self.width:]
                 break
-        print("ACTION=" + repr(action))
+        #print("ACTION=" + repr(action))
         grid.append(action)
         return grid
 
     def printState(self, state):
         for i in range(0, self.height):
             print(state[(i*self.width):(i+1)*self.width])
-
-    def pathIsComplete(self, state, letter):
-        start = self.lettersTab[letter][0:2]
-        end = self.lettersTab[letter][2:4]
-        grid= self.stateToGrid(state)
-        grid.pop() # pop the action
-        self.pathIsCompleteAux(grid, letter, start, end)
-
-    def pathIsCompleteAux(self, grid, letter, start, end):
-        if start[0]==end[0] and start[1]==end[1]:
-            return True
-        else:
-            grid[start[1]]=grid[start[1]][:start[0]] + "." + grid[start[1]][start[0]+1:]
-            for d in directions:
-                i = start[0]+d[0]
-                j = start[1]+d[1]
-                next = [j, i]
-                if inBounds(self.grid, next) and grid[j][i] == letter:
-                    self.pathIsCompleteAux(grid, letter, [i,j], end)
-        print("What does grid is ?" + repr(grid))
-        return False
 
 ######################
 # Auxiliary function #
@@ -137,24 +145,26 @@ def seekLetter(state):
                 return repr(j) + "," + repr(i) + "," + state[i][j]
         j += 1
 
-def pathExists(grid, start, end):
+def pathExists(grid, start, end, letter="."):
     visited = [ [0 for j in range(0, len(grid[0]))] for i in range(0, len(grid)) ]
-    ok = pathExistsDFS(grid, start, end, visited)
+    ok = pathExistsDFS(grid, start, end, visited, letter)
     return ok
 
-def pathExistsDFS(grid, start, end, visited):
-	for d in directions:
-		i = start[0] + d[0]
-		j = start[1] + d[1]
-		next = [i, j]
-		if i == end[0] and j == end[1]:
-			return True
-		if inBounds(grid, next) and grid[i][j] == '.' and not visited[i][j]:
-			visited[i][j] = 1
-			exists = pathExistsDFS(grid, next, end, visited)
-			if exists:
-				return True
-	return False
+def pathExistsDFS(grid, start, end, visited, letter):
+    #print("Starting at " + repr(start))
+    for d in directions:
+        i = start[0] + d[0]
+        j = start[1] + d[1]
+        next = [i, j]
+        if i == end[0] and j == end[1]:
+            return True
+        if inBounds(grid, next) and grid[i][j] == letter and not visited[i][j]:
+            #print("Visiting... "+letter+" (" + repr(i) + ","+ repr(j) +")")
+            visited[i][j] = 1
+            exists = pathExistsDFS(grid, next, end, visited, letter)
+            if exists:
+                return True
+    return False
 
 def inBounds(grid, pos):
     return 0 <= pos[0] and pos[0] < len(grid) and 0 <= pos[1] and pos[1] < len(grid[0])
