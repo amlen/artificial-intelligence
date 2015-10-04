@@ -31,6 +31,8 @@ a
 \textit{In order to perform a search, what are the classes that you must define or extend? Explain precisely why and where they are used inside a treesearch.}
 \subsection{Question 2.}
 \textit{In the expand method of the class Node, what is the advantage of using a yield instead of building a list and returning it afterwards.}
+\\
+A yield doesn't build immediately build the entire list of nodes, it only returns the elements that the program needs. 
 
 \subsection{Question 3.}
 \textit{Both breadth$\_$first$\_$graph$\_$search and depth$\_$first$\_$graph$\_$search are making a call to the same function. How is their fundamental difference implemented?}
@@ -40,10 +42,16 @@ They both call the function"Tree$\_$search". The fundamental difference is that 
 \subsection{Question 4.}
 \textit{What is difference between the implementation of the graph$\_$search and three$\_$search methods and how does it impact the search methods?}
 \\
-The graph$\_$search method uses a "closed" entity. It allows the graph$\_$search to know if it has already entered a certain state. When it does, it puts the state in the "closed" list. When 
+The graph$\_$search method uses a "closed" entity. It allows the graph$\_$search to know if it has already entered a certain state. When it does, it puts the state in the "closed" list. When the search enters in the said state recorded before, the closed list only keeps in memory this state with the best cost. The impact on the search is that while a tree$\_$search might enter the same state several times, the graph$\_$search only contains one node per state, hence making the search faster. (pas sur)
 
+\subsection{Question 5.}
+\textit{What kind of structure is used to implement the closed list? What are the methods involved in the search of an element inside it? What properties must thus have the elements that you can put inside the closed list?}\\
+The closed list uses a hash table. It is used to ensure that every element in the list is put only once. 
 
+\subsection{Question 6.}
+\textit{How technically can you use the implementation of the closed list to deal with symmetrical states?}
 
+When we enter a state, we have to check if it is already stocked in the closed list.
 \section{Conclusion}
 a
 
