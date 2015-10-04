@@ -57,7 +57,8 @@ class NumberLink(Problem):
     def successor(self, state):
         grid = self.stateToGrid(state)
         action = grid.pop().split(",")
-        print("Grid : \n" +repr(grid))
+        print("Grid :")
+        self.printState(state)
         print("Action : \n" + repr(action))
         stateIsViable = True
         pathsAlreadyDone = {}
@@ -91,11 +92,15 @@ class NumberLink(Problem):
                         j = int(action[1]) + d[1]
                         next = [j, i]
                         if inBounds(grid, next) and grid[j][i] == ".":
-                            line = grid[j]
+                            #newgrid est une copie indépendante de grid
+                            newgrid = list(grid)
+                            line = newgrid[j]
                             newline = line[:i] + letterToAdd + line[i+1:]
-                            grid[j] = newline
+                            newgrid[j] = newline
+                            print("Mettre " + letterToAdd + " à (" +
+                                    repr(i) + "," + repr(j) + ")")
                             yield (repr(i) + "," + repr(j) + "," +
-                                    letterToAdd, self.gridToState(grid) +
+                                    letterToAdd, self.gridToState(newgrid) +
                                     repr(i) + "," + repr(j) + "," +
                                     letterToAdd)
         else:
@@ -142,7 +147,7 @@ def seekLetter(state):
     for line in state:
         for i in range(0 , len(line)):
             if not line[i]=='.':
-                return repr(j) + "," + repr(i) + "," + state[i][j]
+                return repr(i) + "," + repr(j) + "," + state[j][i]
         j += 1
 
 def pathExists(grid, start, end, letter="."):
