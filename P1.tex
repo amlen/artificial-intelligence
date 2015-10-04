@@ -1,0 +1,50 @@
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage[french]{babel} 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc} 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}  
+\usepackage{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amsfonts,amssymb}
+\lstset{
+language=Java,
+breaklines=true
+}
+
+
+\author{Florian \bsc{Thuin}  \and Ivan \bsc{Ahad}}
+
+\title{INGI2261 - Artificial Intelligence - Project 1 : The Numberlink Problem}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\section{Introduction}
+a
+\section{First set of questions}
+\subsection{Question 1.}
+\textit{In order to perform a search, what are the classes that you must define or extend? Explain precisely why and where they are used inside a treesearch.}
+\subsection{Question 2.}
+\textit{In the expand method of the class Node, what is the advantage of using a yield instead of building a list and returning it afterwards.}
+
+\subsection{Question 3.}
+\textit{Both breadth$\_$first$\_$graph$\_$search and depth$\_$first$\_$graph$\_$search are making a call to the same function. How is their fundamental difference implemented?}
+\\
+They both call the function"Tree$\_$search". The fundamental difference is that breadth$\_$first$\_$graph$\_$search uses a queue, hence using the First-in First-out principle, while depth$\_$first$\_$graph$\_$search uses a stack, using the Last-in First-out principle. 
+
+\subsection{Question 4.}
+\textit{What is difference between the implementation of the graph$\_$search and three$\_$search methods and how does it impact the search methods?}
+\\
+The graph$\_$search method uses a "closed" entity. It allows the graph$\_$search to know if it has already entered a certain state. When it does, it puts the state in the "closed" list. When 
+
+
+
+\section{Conclusion}
+a
+
+\end{document}
