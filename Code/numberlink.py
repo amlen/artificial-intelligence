@@ -41,7 +41,7 @@ class NumberLink(Problem):
             # Création de la première action (identique
             # au placement d'une lettre sur le tableau)
             self.initial = self.initial.replace("\n", "")
-            self.initial += seekLetter(self.initial)
+            self.initial += seekLetter(self.grid)
             print("initial" + repr(self.initial))
             print("initial grid = " +repr(self.grid))
             start = [0, 0]
@@ -91,7 +91,7 @@ class NumberLink(Problem):
                         i = int(action[0]) + d[0]
                         j = int(action[1]) + d[1]
                         next = [j, i]
-                        if inBounds(grid, next) and grid[j][i] == ".":
+                        if inBounds(grid, next) and grid[j][i] == "." and not isSurround(grid, letterToAdd, [i, j]):
                             #newgrid est une copie indépendante de grid
                             newgrid = list(grid)
                             line = newgrid[j]
@@ -142,13 +142,27 @@ class NumberLink(Problem):
 
 directions = [ [-1, 0], [1, 0], [0, -1], [0, 1] ]
 
-def seekLetter(state):
+def isSurround(grid, letter, pos):
+    nLettersAround = 0
+    for d in directions:
+        i = int(pos[0]) + d[0]
+        j = int(pos[1]) + d[1]
+        next = [j, i]
+        if inBounds(grid, next) and grid[j][i]==letter:
+            nLettersAround += 1
+    if nLettersAround > 2:
+        return True
+    else:
+        return False
+
+def seekLetter(grid):
     j = 0
-    for line in state:
-        for i in range(0 , len(line)):
-            if not line[i]=='.':
-                return repr(i) + "," + repr(j) + "," + state[j][i]
-        j += 1
+    for line in grid:
+        for i in range(0, len(line)):
+            if not line[i]==".":
+                return repr(i) + "," + repr(j) + "," + line[i]
+        j = j + 1
+
 
 def pathExists(grid, start, end, letter="."):
     visited = [ [0 for j in range(0, len(grid[0]))] for i in range(0, len(grid)) ]
