@@ -34,19 +34,19 @@ class NumberLink(Problem):
                         self.lettersTab[line[i]][3]=j
                 j+=1
 
-            print("Nombre de lettres = " + repr(len(self.lettersTab)))
-            print("Nombre de colonnes = " + repr(self.width))
-            print("Nombre de lignes = " + repr(self.height))
+            #print("Nombre de lettres = " + repr(len(self.lettersTab)))
+            #print("Nombre de colonnes = " + repr(self.width))
+            #print("Nombre de lignes = " + repr(self.height))
 
             # Création de la première action (identique
             # au placement d'une lettre sur le tableau)
             self.initial = self.initial.replace("\n", "")
             self.initial += seekLetter(self.grid)
-            print("initial" + repr(self.initial))
-            print("initial grid = " +repr(self.grid))
+            #print("initial" + repr(self.initial))
+            #print("initial grid = " +repr(self.grid))
             start = [0, 0]
             end = [0, 4]
-            print(pathExists(self.grid, start, end))
+            #print(pathExists(self.grid, start, end))
 
     def goal_test(self, state):
         state = state[0:self.width*self.height-1]
@@ -57,9 +57,9 @@ class NumberLink(Problem):
     def successor(self, state):
         grid = self.stateToGrid(state)
         action = grid.pop().split(",")
-        print("Grid :")
+        #print("Grid :")
         self.printState(state)
-        print("Action : \n" + repr(action))
+        #print("Action : \n" + repr(action))
         stateIsViable = True
         pathsAlreadyDone = {}
         # Verification que l'état est viable :
@@ -71,12 +71,14 @@ class NumberLink(Problem):
                 pathsAlreadyDone[letter] = True
             # Si le path pour la lettre peut exister :
             elif pathExists(grid, [pos[1], pos[0]], [pos[3], pos[2]]):
-                print("Le path pour " + letter + " existe toujours")
+                pass
+                #print("Le path pour " + letter + " existe toujours")
             # Si le path est en cours de construction :
             elif letter==action[2] and pathExists(grid, [int(action[1]), int(action[0])], [pos[3],pos[2]]):
-                print("Le path pour " + letter + " est en cours de construction")
+                pass
+                #print("Le path pour " + letter + " est en cours de construction")
             else:
-                print("L'état n'est plus viable pour " + letter)
+                #print("L'état n'est plus viable pour " + letter)
                 stateIsViable=False
         if stateIsViable:
             #print("Création d'un state viable")
@@ -97,8 +99,8 @@ class NumberLink(Problem):
                             line = newgrid[j]
                             newline = line[:i] + letterToAdd + line[i+1:]
                             newgrid[j] = newline
-                            print("Mettre " + letterToAdd + " à (" +
-                                    repr(i) + "," + repr(j) + ")")
+                            #print("Mettre " + letterToAdd + " à (" +
+                            #        repr(i) + "," + repr(j) + ")")
                             yield (repr(i) + "," + repr(j) + "," +
                                     letterToAdd, self.gridToState(newgrid) +
                                     repr(i) + "," + repr(j) + "," +
@@ -141,7 +143,10 @@ class NumberLink(Problem):
 ######################
 
 directions = [ [-1, 0], [1, 0], [0, -1], [0, 1] ]
+square = [ [-1,0], [1,0], [0, -1], [0,1], [-1,-1], [-1,1], [1,1], [1,-1] ]
 
+# Cette fonction retourne True si le carré autour de pos (9x9) ne
+# contient pas plus de 2 fois la letter, false sinon
 def isSurround(grid, letter, pos):
     nLettersAround = 0
     for d in directions:
