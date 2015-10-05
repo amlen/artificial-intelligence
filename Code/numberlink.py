@@ -47,6 +47,7 @@ class NumberLink(Problem):
             start = [0, 0]
             end = [0, 4]
             #print(pathExists(self.grid, start, end))
+            print("Finish INIT")
 
     def goal_test(self, state):
         state = state[0:self.width*self.height-1]
