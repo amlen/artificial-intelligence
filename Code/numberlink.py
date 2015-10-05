@@ -41,7 +41,7 @@ class NumberLink(Problem):
             # Création de la première action (identique
             # au placement d'une lettre sur le tableau)
             self.initial = self.initial.replace("\n", "")
-            self.initial += seekLetter(self.grid)
+            self.initial += seekLetter(self.lettersTab)
             #print("initial" + repr(self.initial))
             #print("initial grid = " +repr(self.grid))
             start = [0, 0]
@@ -58,7 +58,7 @@ class NumberLink(Problem):
         grid = self.stateToGrid(state)
         action = grid.pop().split(",")
         #print("Grid :")
-        self.printState(state)
+        #self.printState(state)
         #print("Action : \n" + repr(action))
         stateIsViable = True
         pathsAlreadyDone = {}
@@ -101,6 +101,7 @@ class NumberLink(Problem):
                             newgrid[j] = newline
                             #print("Mettre " + letterToAdd + " à (" +
                             #        repr(i) + "," + repr(j) + ")")
+                            newstate = self.gridToState(newgrid)
                             yield (repr(i) + "," + repr(j) + "," +
                                     letterToAdd, self.gridToState(newgrid) +
                                     repr(i) + "," + repr(j) + "," +
@@ -137,6 +138,7 @@ class NumberLink(Problem):
     def printState(self, state):
         for i in range(0, self.height):
             print(state[(i*self.width):(i+1)*self.width])
+        print("")
 
 ######################
 # Auxiliary function #
@@ -160,14 +162,23 @@ def isSurround(grid, letter, pos):
     else:
         return False
 
-def seekLetter(grid):
-    j = 0
-    for line in grid:
-        for i in range(0, len(line)):
-            if not line[i]==".":
-                return repr(i) + "," + repr(j) + "," + line[i]
-        j = j + 1
-
+def seekLetter(lettersTab):
+    keys = list(lettersTab.keys())
+    curX = len(keys)
+    curY = curX
+    curLetter = keys[0]
+    for letter, pos in lettersTab.items():
+        x1 = pos[0]
+        x2 = pos[2]
+        y1 = pos[1]
+        y2 = pos[3]
+        x = x2-x1
+        y = y2-y1
+        if curX > x and curY > y:
+            curX = x
+            curY = y
+            curLetter = letter
+    return repr(lettersTab[curLetter][0]) +","+ repr(lettersTab[curLetter][1]) +","+ curLetter
 
 def pathExists(grid, start, end, letter="."):
     visited = [ [0 for j in range(0, len(grid[0]))] for i in range(0, len(grid)) ]
@@ -197,23 +208,11 @@ def inBounds(grid, pos):
 # Launch the search #
 #####################
 
-
-
 problem=NumberLink(sys.argv[1])
-#problem.successor(problem.initial)
-"""for i in problem.successor(problem.initial):
-    print("i[1]=" + i[1])
-    problem.printState(i[1])
-    for j in problem.successor(i[1]+i[0]):
-        print("Second nodes")
-        problem.printState(j[1])
-        for k in problem.successor(j[1]+j[0]):
-            print("Third nodes")
-            problem.printState(k[1])"""
 #example of bfs search
 node=depth_first_graph_search(problem)
 #example of print
 path=node.path()
 path.reverse()
 for n in path:
-    print(n.state) #assuming that the __str__ function of states output the correct format
+    problem.printState(n.state) #assuming that the __str__ function of states output the correct format
