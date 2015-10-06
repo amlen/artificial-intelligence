@@ -14,6 +14,7 @@ class NumberLink(Problem):
         self.width =  0
         self.height = 0
         self.lettersTab = {}
+        self.pathsAlreadyDone = {}
         with open(init, "r") as file:
             # Lecture du fichier
             data_read = file.read()
@@ -41,7 +42,7 @@ class NumberLink(Problem):
             # Création de la première action (identique
             # au placement d'une lettre sur le tableau)
             self.initial = self.initial.replace("\n", "")
-            self.initial += seekLetter(self.lettersTab)
+            self.initial += self.seekLetter(self.lettersTab)
             #print("initial" + repr(self.initial))
             #print("initial grid = " +repr(self.grid))
             start = [0, 0]
@@ -50,6 +51,7 @@ class NumberLink(Problem):
             print("Finish INIT")
 
     def goal_test(self, state):
+        #self.printState(state)
         state = state[0:self.width*self.height-1]
         if state.count(".") > 0:
                 return False
@@ -62,14 +64,16 @@ class NumberLink(Problem):
         #self.printState(state)
         #print("Action : \n" + repr(action))
         stateIsViable = True
-        pathsAlreadyDone = {}
         # Verification que l'état est viable :
         for letter, pos in self.lettersTab.items():
             #print("Successor on letter : " + letter)
             # Si le path pour la lettre est déjà créé :
-            if pathExists(grid, [pos[1], pos[0]], [pos[3], pos[2]], letter):
+            pathIsCreated = pathExists(grid, [pos[1], pos[0]], [pos[3], pos[2]], letter)
+            if letter in self.pathsAlreadyDone and not pathIsCreated:
+                del self.pathsAlreadyDone[letter]
+            if letter not in self.pathsAlreadyDone and pathIsCreated:
                 #print("Le path de " + letter + " est fini")
-                pathsAlreadyDone[letter] = True
+                self.pathsAlreadyDone[letter] = True
             # Si le path pour la lettre peut exister :
             elif pathExists(grid, [pos[1], pos[0]], [pos[3], pos[2]]):
                 pass
@@ -78,35 +82,41 @@ class NumberLink(Problem):
             elif letter==action[2] and pathExists(grid, [int(action[1]), int(action[0])], [pos[3],pos[2]]):
                 pass
                 #print("Le path pour " + letter + " est en cours de construction")
+            elif pathIsCreated:
+                pass
             else:
                 #print("L'état n'est plus viable pour " + letter)
                 stateIsViable=False
+                break
         if stateIsViable:
             #print("Création d'un state viable")
             letterToAdd = action[2]
             for letter, pos in self.lettersTab.items():
-                if letterToAdd in pathsAlreadyDone:
-                    letterToAdd=letter
-                    action[0]=pos[0]
-                    action[1]=pos[1]
-                if letterToAdd not in pathsAlreadyDone:
-                    for d in directions:
-                        i = int(action[0]) + d[0]
-                        j = int(action[1]) + d[1]
-                        next = [j, i]
-                        if inBounds(grid, next) and grid[j][i] == "." and not isSurround(grid, letterToAdd, [i, j]):
-                            #newgrid est une copie indépendante de grid
-                            newgrid = list(grid)
-                            line = newgrid[j]
-                            newline = line[:i] + letterToAdd + line[i+1:]
-                            newgrid[j] = newline
-                            #print("Mettre " + letterToAdd + " à (" +
-                            #        repr(i) + "," + repr(j) + ")")
-                            newstate = self.gridToState(newgrid)
-                            yield (repr(i) + "," + repr(j) + "," +
-                                    letterToAdd, self.gridToState(newgrid) +
-                                    repr(i) + "," + repr(j) + "," +
-                                    letterToAdd)
+                if letterToAdd in self.pathsAlreadyDone:
+                    newaction=self.seekLetter(self.lettersTab).split(",")
+                    letterToAdd=newaction[2]
+                    action[0]=newaction[0]
+                    action[1]=newaction[1]
+                else:
+                    break
+            if letterToAdd not in self.pathsAlreadyDone:
+                for d in directions:
+                    i = int(action[0]) + d[0]
+                    j = int(action[1]) + d[1]
+                    next = [j, i]
+                    if inBounds(grid, next) and grid[j][i] == "." and not isSurround(grid, letterToAdd, [i, j]):
+                        #newgrid est une copie indépendante de grid
+                        newgrid = list(grid)
+                        line = newgrid[j]
+                        newline = line[:i] + letterToAdd + line[i+1:]
+                        newgrid[j] = newline
+                        #print("Mettre " + letterToAdd + " à (" +
+                        #        repr(i) + "," + repr(j) + ")")
+                        newstate = self.gridToState(newgrid)
+                        yield (repr(i) + "," + repr(j) + "," +
+                                letterToAdd, self.gridToState(newgrid) +
+                                repr(i) + "," + repr(j) + "," +
+                                letterToAdd)
         else:
             return None
 
@@ -141,12 +151,31 @@ class NumberLink(Problem):
             print(state[(i*self.width):(i+1)*self.width])
         print("")
 
+    def seekLetter(self, lettersTab):
+        keys = list(lettersTab.keys())
+        curX = len(keys)*2
+        curY = curX
+        curLetter = keys[0]
+        for letter, pos in lettersTab.items():
+            if letter not in self.pathsAlreadyDone:
+                x1 = pos[0]
+                x2 = pos[2]
+                y1 = pos[1]
+                y2 = pos[3]
+                x = x2-x1
+                y = y2-y1
+                if curX > x and curY > y:
+                    curX = x
+                    curY = y
+                    curLetter = letter
+        return repr(lettersTab[curLetter][0]) +","+ repr(lettersTab[curLetter][1]) +","+ curLetter
+
 ######################
 # Auxiliary function #
 ######################
 
 directions = [ [-1, 0], [1, 0], [0, -1], [0, 1] ]
-square = [ [-1,0], [1,0], [0, -1], [0,1], [-1,-1], [-1,1], [1,1], [1,-1] ]
+square = [ [-1,-1], [-1,1], [1,1], [1,-1] ]
 
 # Cette fonction retourne True si le carré autour de pos (9x9) ne
 # contient pas plus de 2 fois la letter, false sinon
@@ -161,25 +190,16 @@ def isSurround(grid, letter, pos):
     if nLettersAround > 2:
         return True
     else:
-        return False
-
-def seekLetter(lettersTab):
-    keys = list(lettersTab.keys())
-    curX = len(keys)
-    curY = curX
-    curLetter = keys[0]
-    for letter, pos in lettersTab.items():
-        x1 = pos[0]
-        x2 = pos[2]
-        y1 = pos[1]
-        y2 = pos[3]
-        x = x2-x1
-        y = y2-y1
-        if curX > x and curY > y:
-            curX = x
-            curY = y
-            curLetter = letter
-    return repr(lettersTab[curLetter][0]) +","+ repr(lettersTab[curLetter][1]) +","+ curLetter
+        for d in square:
+            i = int(pos[0]) + d[0]
+            j = int(pos[1]) + d[1]
+            next = [j, i]
+            if inBounds(grid, next) and grid[j][i]==letter:
+                nLettersAround += 1
+                if nLettersAround >= 7:
+                    return True
+                else:
+                    return False
 
 def pathExists(grid, start, end, letter="."):
     visited = [ [0 for j in range(0, len(grid[0]))] for i in range(0, len(grid)) ]
