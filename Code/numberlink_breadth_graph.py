@@ -146,6 +146,7 @@ class NumberLink(Problem):
         visitedLines = 0
         state = state.replace("\n", "")
         action = object()
+        #print("STATE in gridToState = " + state)
         for i in range(0, len(state), self.width):
             if i < self.width:
                 grid.append(state[0:self.width])
@@ -155,6 +156,7 @@ class NumberLink(Problem):
             if (visitedLines == self.height):
                 action = state[i+self.width:]
                 break
+        #print("ACTION=" + repr(action))
         grid.append(action)
         return grid
 
@@ -236,7 +238,7 @@ def inBounds(grid, pos):
 
 problem=NumberLink(sys.argv[1])
 #example of bfs search
-node=depth_first_tree_search(problem)
+node=breadth_first_graph_search(problem)
 #example of print
 path=node.path()
 path.reverse()
