@@ -17,6 +17,7 @@ class NumberLink(Problem):
         self.height = 0
         self.lettersTab = {}
         self.pathsAlreadyDone = {}
+        self.numberOfNodesVisited = 0
         with open(init, "r") as file:
             # Lecture du fichier
             data_read = file.read()
@@ -54,6 +55,7 @@ class NumberLink(Problem):
 
     def goal_test(self, state):
         #self.printState(state)
+        self.numberOfNodesVisited += 1
         state = state[0:self.width*self.height-1]
         if state.count(".") > 0:
                 return False
@@ -242,5 +244,7 @@ node=depth_first_tree_search(problem)
 #example of print
 path=node.path()
 path.reverse()
+print("Nombre de noeuds solution : " + repr(len(path)))
+print("Nombre de noeuds visités : " + repr(problem.numberOfNodesVisited))
 for n in path:
     problem.printState(n.state) #assuming that the __str__ function of states output the correct format

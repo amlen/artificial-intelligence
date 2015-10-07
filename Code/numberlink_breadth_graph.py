@@ -17,6 +17,7 @@ class NumberLink(Problem):
         self.height = 0
         self.lettersTab = {}
         self.pathsAlreadyDone = {}
+        self.numberOfNodesVisited = 0
         with open(init, "r") as file:
             # Lecture du fichier
             data_read = file.read()
@@ -54,6 +55,7 @@ class NumberLink(Problem):
 
     def goal_test(self, state):
         #self.printState(state)
+        self.numberOfNodesVisited += 1
         state = state[0:self.width*self.height-1]
         if state.count(".") > 0:
                 return False
@@ -96,6 +98,8 @@ class NumberLink(Problem):
                 newgrid[j] = newline
                 for letter, pos in self.lettersTab.items():
                     #print("5th check")
+                    if self.letterWasFinished(grid, [pos[2], pos[3]], letter):
+                        self.pathsAlreadyDone[letter] = True
                     if letter not in self.pathsAlreadyDone:
                         if letter==action[2] and pathExists(newgrid, [j, i], [pos[3], pos[2]]):
                             #print("Etat OK - if for letter : " + letter)
@@ -104,17 +108,30 @@ class NumberLink(Problem):
                             #print("2nd check for letter : " + letter + " pos : " + repr(pos))
                             stateOK = True
                         else:
-                            #print("3rd check for letter : " + letter + " pos : " + repr(pos))
+                            #print("3rd check for letter : " + letter + " pos : " + repr(pos) + " action : " + repr(action))
+                            #print(repr(newgrid))
                             stateOK = False
                             break
                     else:
+                        #print("la lettre "+ letter + " est dans pathsAlreadyDone wtf")
                         pass
-                        #print("la lettre "+ letter + "est dans pathsAlreadyDone wtf")
             if stateOK:
                 newstate = self.gridToState(newgrid) + repr(i)+","+repr(j)+","+action[2]
                 #print("newstate = " + newstate)
                 yield (repr(i) + "," + repr(j) + "," + action[2], newstate)
 
+    def letterWasFinished(self, grid, pos, letter):
+        result = False
+        for d in directions:
+            i = pos[0]+d[0]
+            j = pos[1]+d[1]
+            next = [j, i]
+            if inBounds(grid, next) and grid[j][i]==letter:
+                #print("Letter " + letter + " was finished ! ")
+                result = True
+                break
+        return result
+         
     def isSurround(self, grid, letter, pos):
         #print("isSurround")
         nLettersAround = 0
@@ -242,5 +259,7 @@ node=breadth_first_graph_search(problem)
 #example of print
 path=node.path()
 path.reverse()
+print("Nombre de noeuds solution : " + repr(len(path)))
+print("Nombre de noeuds visités : " + repr(problem.numberOfNodesVisited))
 for n in path:
     problem.printState(n.state) #assuming that the __str__ function of states output the correct format

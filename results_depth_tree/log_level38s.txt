@@ -1,3 +1,5 @@
+Nombre de noeuds solution : 38
+Nombre de noeuds visités : 132
 .......
 ....AB.
 ..CB...
@@ -8,122 +10,146 @@ FE...DC
 
 .......
 ....AB.
-..CB...
-.A.DD..
+..CB.B.
+.A.D...
 ...E...
 ...F...
 FE...DC
 
 .......
 ....AB.
-..CB...
-.A.DDD.
+..CBBB.
+.A.D...
 ...E...
 ...F...
-FE...DC
-
-.......
-....AB.
-..CB...
-.A.DDD.
-...E.D.
-...F...
-FE...DC
-
-.......
-....AB.
-..CB...
-.A.DDD.
-...E.D.
-...F.D.
 FE...DC
 
 .......
 ...AAB.
-..CB...
-.A.DDD.
-...E.D.
-...F.D.
+..CBBB.
+.A.D...
+...E...
+...F...
 FE...DC
 
 .......
 ..AAAB.
-..CB...
-.A.DDD.
-...E.D.
-...F.D.
+..CBBB.
+.A.D...
+...E...
+...F...
 FE...DC
 
 .......
 .AAAAB.
-..CB...
-.A.DDD.
-...E.D.
-...F.D.
-FE...DC
-
-.......
-.AAAAB.
-.ACB...
-.A.DDD.
-...E.D.
-...F.D.
-FE...DC
-
-.......
-.AAAAB.
-.ACB.B.
-.A.DDD.
-...E.D.
-...F.D.
+..CBBB.
+.A.D...
+...E...
+...F...
 FE...DC
 
 .......
 .AAAAB.
 .ACBBB.
-.A.DDD.
-...E.D.
-...F.D.
+.A.D...
+...E...
+...F...
 FE...DC
 
 .......
 .AAAAB.
 .ACBBB.
-.A.DDD.
-...EED.
-...F.D.
+.A.D...
+...E...
+..FF...
 FE...DC
 
 .......
 .AAAAB.
 .ACBBB.
-.A.DDD.
-...EED.
-...FED.
+.A.D...
+...E...
+.FFF...
 FE...DC
 
 .......
 .AAAAB.
 .ACBBB.
-.A.DDD.
-...EED.
-...FED.
+.A.D...
+...E...
+FFFF...
+FE...DC
+
+.......
+.AAAAB.
+.ACBBB.
+.A.D...
+...EE..
+FFFF...
+FE...DC
+
+.......
+.AAAAB.
+.ACBBB.
+.A.D...
+...EE..
+FFFFE..
+FE...DC
+
+.......
+.AAAAB.
+.ACBBB.
+.A.D...
+...EE..
+FFFFE..
 FE..EDC
 
 .......
 .AAAAB.
 .ACBBB.
-.A.DDD.
-...EED.
-...FED.
+.A.D...
+...EE..
+FFFFE..
 FE.EEDC
+
+.......
+.AAAAB.
+.ACBBB.
+.A.D...
+...EE..
+FFFFE..
+FEEEEDC
+
+.......
+.AAAAB.
+.ACBBB.
+.A.DD..
+...EE..
+FFFFE..
+FEEEEDC
+
+.......
+.AAAAB.
+.ACBBB.
+.A.DDD.
+...EE..
+FFFFE..
+FEEEEDC
 
 .......
 .AAAAB.
 .ACBBB.
 .A.DDD.
 ...EED.
-...FED.
+FFFFE..
+FEEEEDC
+
+.......
+.AAAAB.
+.ACBBB.
+.A.DDD.
+...EED.
+FFFFED.
 FEEEEDC
 
 .......
@@ -131,7 +157,7 @@ FEEEEDC
 .ACBBB.
 .ACDDD.
 ...EED.
-...FED.
+FFFFED.
 FEEEEDC
 
 .......
@@ -139,7 +165,7 @@ FEEEEDC
 .ACBBB.
 .ACDDD.
 ..CEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 .......
@@ -147,7 +173,7 @@ FEEEEDC
 .ACBBB.
 .ACDDD.
 .CCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 .......
@@ -155,7 +181,7 @@ FEEEEDC
 .ACBBB.
 .ACDDD.
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 .......
@@ -163,7 +189,7 @@ FEEEEDC
 .ACBBB.
 CACDDD.
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 .......
@@ -171,7 +197,7 @@ FEEEEDC
 CACBBB.
 CACDDD.
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 .......
@@ -179,7 +205,7 @@ CAAAAB.
 CACBBB.
 CACDDD.
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 C......
@@ -187,7 +213,7 @@ CAAAAB.
 CACBBB.
 CACDDD.
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 CC.....
@@ -195,7 +221,7 @@ CAAAAB.
 CACBBB.
 CACDDD.
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 CCC....
@@ -203,7 +229,7 @@ CAAAAB.
 CACBBB.
 CACDDD.
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 CCCC...
@@ -211,7 +237,7 @@ CAAAAB.
 CACBBB.
 CACDDD.
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 CCCCC..
@@ -219,7 +245,7 @@ CAAAAB.
 CACBBB.
 CACDDD.
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 CCCCCC.
@@ -227,7 +253,7 @@ CAAAAB.
 CACBBB.
 CACDDD.
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 CCCCCCC
@@ -235,7 +261,7 @@ CAAAAB.
 CACBBB.
 CACDDD.
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 CCCCCCC
@@ -243,7 +269,7 @@ CAAAABC
 CACBBB.
 CACDDD.
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 CCCCCCC
@@ -251,7 +277,7 @@ CAAAABC
 CACBBBC
 CACDDD.
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 CCCCCCC
@@ -259,7 +285,7 @@ CAAAABC
 CACBBBC
 CACDDDC
 CCCEED.
-...FED.
+FFFFED.
 FEEEEDC
 
 CCCCCCC
@@ -267,31 +293,7 @@ CAAAABC
 CACBBBC
 CACDDDC
 CCCEEDC
-...FED.
-FEEEEDC
-
-CCCCCCC
-CAAAABC
-CACBBBC
-CACDDDC
-CCCEEDC
-...FEDC
-FEEEEDC
-
-CCCCCCC
-CAAAABC
-CACBBBC
-CACDDDC
-CCCEEDC
-..FFEDC
-FEEEEDC
-
-CCCCCCC
-CAAAABC
-CACBBBC
-CACDDDC
-CCCEEDC
-.FFFEDC
+FFFFED.
 FEEEEDC
 
 CCCCCCC

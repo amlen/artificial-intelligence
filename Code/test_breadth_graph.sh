@@ -6,7 +6,7 @@ time python3.4 numberlink_breadth_graph.py ../instances/level2m.in > ../results_
 echo "Test level4m"
 time python3.4 numberlink_breadth_graph.py ../instances/level4m.in > ../results_breadth_graph/log_level4m.txt
 echo "Test level9m"
-time python3.4 numberlin_breadth_graphk.py ../instances/level9m.in > ../results_breadth_graph/log_level9m.txt
+time python3.4 numberlink_breadth_graph.py ../instances/level9m.in > ../results_breadth_graph/log_level9m.txt
 echo "Test level10m"
 time python3.4 numberlink_breadth_graph.py ../instances/level10m.in > ../results_breadth_graph/log_level10m.txt
 echo "Test level15m"

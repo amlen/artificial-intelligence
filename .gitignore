@@ -63,3 +63,8 @@ target/
 *.log
 *.fls
 *.toc
+*.backup
+*.pdf
+
+# bash
+*.fuse*

@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Test easy"
-time python3.4 numberlink.py ../instances_breadth_tree/easy.in > ../results_breadth_tree/log_easy.txt
+time python3.4 numberlink_breadth_tree.py ../instances/easy.in > ../results_breadth_tree/log_easy.txt
 echo "Test level2m"
 time python3.4 numberlink_breadth_tree.py ../instances/level2m.in > ../results_breadth_tree/log_level2m.txt
 echo "Test level4m"

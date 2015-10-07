@@ -1,41 +1,40 @@
 Test easy
-0.01user 0.01system 0:00.03elapsed 85%CPU (0avgtext+0avgdata
-10292maxresident)k
-0inputs+0outputs (0major+1142minor)pagefaults 0swaps
-Test level2m
-18.29user 0.00system 0:18.31elapsed 99%CPU (0avgtext+0avgdata
-13152maxresident)k
-0inputs+0outputs (0major+4233minor)pagefaults 0swaps
-Test level4m
-0.65user 0.00system 0:00.66elapsed 99%CPU (0avgtext+0avgdata
-10464maxresident)k
-0inputs+0outputs (0major+1203minor)pagefaults 0swaps
-Test level9m
-0.31user 0.00system 0:00.32elapsed 98%CPU (0avgtext+0avgdata
-10408maxresident)k
-0inputs+0outputs (0major+1181minor)pagefaults 0swaps
-Test level10m
-205.33user 0.03system 3:25.48elapsed 99%CPU (0avgtext+0avgdata
-53796maxresident)k
-0inputs+0outputs (0major+10360minor)pagefaults 0swaps
-Test level15m
-232.55user 0.07system 3:52.74elapsed 99%CPU (0avgtext+0avgdata
-56784maxresident)k
-0inputs+0outputs (0major+14428minor)pagefaults 0swaps
-Test level38s
-0.22user 0.00system 0:00.24elapsed 97%CPU (0avgtext+0avgdata
-10260maxresident)k
+0.02user 0.00system 0:00.03elapsed 88%CPU (0avgtext+0avgdata 10224maxresident)k
 0inputs+0outputs (0major+1151minor)pagefaults 0swaps
+
+Test level2m
+79.28user 0.05system 1:19.40elapsed 99%CPU (0avgtext+0avgdata 54340maxresident)k
+0inputs+0outputs (0major+19674minor)pagefaults 0swaps
+
+Test level4m
+0.35user 0.00system 0:00.36elapsed 98%CPU (0avgtext+0avgdata 10452maxresident)k
+0inputs+0outputs (0major+1241minor)pagefaults 0swaps
+
+Test level9m
+0.60user 0.00system 0:00.61elapsed 99%CPU (0avgtext+0avgdata 10840maxresident)k
+0inputs+0outputs (0major+1300minor)pagefaults 0swaps
+
+Test level10m
+485.90user 0.26system 8:06.75elapsed 99%CPU (0avgtext+0avgdata 192808maxresident)k
+0inputs+0outputs (0major+60672minor)pagefaults 0swaps
+
+Test level15m
+1577.69user 0.53system 26:34.75elapsed 98%CPU (0avgtext+0avgdata 320376maxresident)k
+256inputs+0outputs (3major+96133minor)pagefaults 0swaps
+
+Test level38s
+0.11user 0.00system 0:00.12elapsed 94%CPU (0avgtext+0avgdata 10120maxresident)k
+24inputs+0outputs (0major+1185minor)pagefaults 0swaps
+
 Test level39s
-0.06user 0.01system 0:00.08elapsed 94%CPU (0avgtext+0avgdata
-10244maxresident)k
-0inputs+0outputs (0major+1148minor)pagefaults 0swaps
+0.46user 0.01system 0:00.47elapsed 98%CPU (0avgtext+0avgdata 10548maxresident)k
+0inputs+0outputs (0major+1260minor)pagefaults 0swaps
+
 Test path
-0.11user 0.00system 0:00.12elapsed 96%CPU (0avgtext+0avgdata
-10396maxresident)k
-0inputs+0outputs (0major+1184minor)pagefaults 0swaps
+0.41user 0.02system 0:00.44elapsed 98%CPU (0avgtext+0avgdata 10572maxresident)k
+0inputs+0outputs (0major+1222minor)pagefaults 0swaps
+
 Test wiki
-0.08user 0.00system 0:00.09elapsed 92%CPU (0avgtext+0avgdata
-10288maxresident)k
-0inputs+0outputs (0major+1149minor)pagefaults 0swaps
+0.06user 0.00system 0:00.07elapsed 91%CPU (0avgtext+0avgdata 10116maxresident)k
+0inputs+0outputs (0major+1168minor)pagefaults 0swaps
 
