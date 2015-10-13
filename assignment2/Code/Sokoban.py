@@ -1,11 +1,10 @@
-__author__ = 'Cyril de Vogelaere : 2814-11-00 & Thuin florian : '
+__author__ = 'Cyril de Vogelaere : 2814-11-00 & Thuin florian : 0656-11-00'
 
 import time
 import sys
 from copy import deepcopy
 from os import listdir, system
 from search import *
-
 
 # LEFT RIGHT UP DOWN
 directions = [[0, -1], [0, 1], [-1, 0], [1, 0]]
@@ -48,7 +47,7 @@ def readStateFromInit(init):
     with open(init, "r") as file:
         # Lecture du fichier
         grid = readGridFromFile(init)
-        # Creation d'un tableau équivalent au probleme
+        # Creation d'un tableau equivalent au probleme
         avatarPos = (0,0) #Original position of the avatar
         listOfBoxesPos = [] #Orginal position of boxes
         #Read grid for important elem
@@ -76,18 +75,42 @@ def inBounds(grid, pos):
     return 0 <= pos[0] and pos[0] < len(grid) and 0 <= pos[1] and pos[1] < len(grid[0])
 
 #Check if the state is a KO state
-def isKOState(state, box):
+def isKOState(problem, state, box):
     #Check direction in which i can push
-    if box in state.listOfGoalPos :
+    if box in problem.listOfGoalPos :
         # If box on goal state, it's never a KO state
         return False
+    #Test LEFT AND RIGHT
     freedom = 0
-    for d in directions:
-        i = box[0] + d[0]
-        j = box[1] + d[1]
-        if inBounds(state.grid, (i, j)) and state.grid[i][j] == " ":
+    for x in range(0, 2):
+        i = box[0] + directions[x][0]
+        j = box[1] + directions[x][1]
+        if inBounds(state.grid, (i, j)) and (state.grid[i][j] == " " or state.grid[i][j] == "@"):
             freedom += 1;
-    return freedom < 3
+    if freedom == 2:
+        return False
+    #Test LEFT AND RIGHT
+    freedom = 0
+    for x in range(2, 4):
+        i = box[0] + directions[x][0]
+        j = box[1] + directions[x][1]
+        if inBounds(state.grid, (i, j)) and (state.grid[i][j] == " " or state.grid[i][j] == "@"):
+            freedom += 1;
+    if freedom == 2:
+        return False
+    return False
+
+# Check if pushing box will lead to a KO state
+def isPushingOK(problem, state, dir, x, y):
+    result = False
+    state.grid[x] = state.grid[x][:y] + " " + state.grid[x][y+1:]
+    newBoxX = x + dir[0]
+    newBoxY = y + dir[1]
+    state.grid[newBoxX] = state.grid[newBoxX][:newBoxY] + "$" + state.grid[newBoxX][newBoxY+1:]
+    result = not isKOState(problem, state, (newBoxX, newBoxY))
+    state.grid[newBoxX] = state.grid[newBoxX][:newBoxY] + " " + state.grid[newBoxX][newBoxY+1:]
+    state.grid[x] = state.grid[x][:y] + "$" + state.grid[x][y+1:]
+    return result
 
 #Check if two position are adjacent
 def arePosAdjacent(posA, posB):
@@ -104,6 +127,26 @@ def canPushBox(grid, char, box):
             return True
     return False
 
+#Generate successor from state
+#Pre : Successor can be generated
+def generateSuccessor(state, dir):
+    newState = deepcopy(state)
+    #Calculate new avatar pos
+    newState.avatarPos = (state.avatarPos[0] + dir[0], state.avatarPos[1] + dir[1])
+    #Clear old pos in grid, update avatar pos in state
+    newState.grid[state.avatarPos[0]] = newState.grid[state.avatarPos[0]][:state.avatarPos[1]] + " " + newState.grid[state.avatarPos[0]][state.avatarPos[1]+1:]
+    if(newState.grid[newState.avatarPos[0]][newState.avatarPos[1]] == "$"):
+        #Move box before updating avatar in grid
+        for index in range(0, len(newState.listOfBoxesPos)):
+            if (newState.avatarPos[0], newState.avatarPos[1]) == newState.listOfBoxesPos[index]:
+                #Calculate new coordinate
+                newX = dir[0] + newState.avatarPos[0]
+                newY = dir[1] + newState.avatarPos[1]
+                newState.listOfBoxesPos[index] = (newX, newY)
+                newState.grid[newX] = newState.grid[newX][:newY] + "$" + newState.grid[newX][newY+1:]
+    #Update avatar in grid
+    newState.grid[newState.avatarPos[0]] = newState.grid[newState.avatarPos[0]][:newState.avatarPos[1]] + "@" + newState.grid[newState.avatarPos[0]][newState.avatarPos[1]+1:]
+    return newState
 
 #################
 #   My classes  #
@@ -114,20 +157,24 @@ class Sokoban(Problem):
         # Extract state from file
         self.listOfGoalPos = readStateFromGoal(init + ".goal")
         initState = readStateFromInit(init + ".init")
-        #Debug print
-        print(initState)
-        print(initState.__repr__())
         # Extend super init
         super().__init__(initState)
 
     def goal_test(self, state):
         for elem in self.listOfGoalPos:
-            if not elem in state.listOfBoxesPos :
+            if not elem in state.listOfBoxesPos:
                 return False
         return True
 
     def successor(self, state):
-        pass
+        #print(state)
+        for i in range(0, len(directions)):
+            x = state.avatarPos[0] + directions[i][0]
+            y = state.avatarPos[1] + directions[i][1]
+            if inBounds(state.grid, (x, y)) and (state.grid[x][y] == ' ' or (state.grid[x][y] == '$' and canPushBox(state.grid, state.avatarPos, (x,y)) and isPushingOK(self, state, directions[i], x, y))):
+                #Yield result
+                yield (i, generateSuccessor(state, directions[i]))
+
 
 class State:
     def __init__(self, gridInit, listOfBoxesPos, avatarPos):
@@ -165,9 +212,9 @@ class State:
 now = time.time()
 problem = Sokoban(sys.argv[1])
 
-'''
 # Solve using bfs search
-node = astar_graph_search(problem, TODO FUNCTION H)
+node = depth_first_graph_search(problem)
+# node = astar_graph_search(problem, TODO FUNCTION H)
 # Print
 path = node.path()
 path.reverse()
@@ -177,4 +224,3 @@ for n in path:
 #Calculate time elapsed
 later = time.time()
 print(later - now)
-'''
