@@ -7,7 +7,12 @@ of the course.}
 \begin{enumerate}
  \item Give a consistent heuristic for this problem. Prove that it is admissible.
     \begin{framed}
-      \todo[inline]{Réponse à faire}
+        Our heuristic is a function of the distance with a manhattan
+        distance heuristic (ignoring walls) between
+        the current character position and the \euro{} position. It is
+        admissible because it will never overestimate the cost of reaching
+        the goal, as such we will always find an optimal solution with A*
+        search. 
     \end{framed}
  \item Show on the left maze the states (board positions) that are visited during an
 execution of a uniform-cost graph search. We assume that when different states
