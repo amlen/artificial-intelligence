@@ -36,24 +36,12 @@ class NumberLink(Problem):
                         self.lettersTab[line[i]][2]=i
                         self.lettersTab[line[i]][3]=j
                 j+=1
-
-            #print("Nombre de lettres = " + repr(len(self.lettersTab)))
-            #print("Nombre de colonnes = " + repr(self.width))
-            #print("Nombre de lignes = " + repr(self.height))
-
             # Création de la première action (identique
             # au placement d'une lettre sur le tableau)
             self.initial = self.initial.replace("\n", "")
             self.initial += self.seekLetter(self.grid, self.lettersTab)
-            #print("initial" + repr(self.initial))
-            #print("initial grid = " +repr(self.grid))
-            #start = [0, 0]
-            #end = [0, 4]
-            #print(pathExists(self.grid, start, end))
-            #print("Finish INIT")
 
     def goal_test(self, state):
-        #self.printState(state)
         state = state[0:self.width*self.height-1]
         if state.count(".") > 0:
                 return False
@@ -62,61 +50,61 @@ class NumberLink(Problem):
     def successor(self, state):
         grid = self.stateToGrid(state)
         action = grid.pop().split(",")
-        #print("Grid :")
-        #self.printState(state)
-        #print("Action : \n" + repr(action))
-        # Verification que l'état est viable :
-        #print("action =" +repr(action))
         pos = self.lettersTab[action[2]]
-        # Si on revient sur un chemin qui était fini :
         if action[2] in self.pathsAlreadyDone:
-            #print("Retour sur le chemin de " + action[2])
             del self.pathsAlreadyDone[action[2]]
         # Si on vient de finir un chemin, on l'enregistre et on choisit une
         # nouvelle lettre
         nextToFinish = isNextTo(grid, [action[0], action[1]], pos[2:4], action[2])
         if action[2] not in self.pathsAlreadyDone and nextToFinish:
-            #print("4th check")
             self.pathsAlreadyDone[action[2]]=True
             action=self.seekLetter(grid, self.lettersTab).split(",")
         for d in directions:
             stateOK = False
-            #print("action in for = " + repr(action))
             i = int(action[0]) + d[0]
             j = int(action[1]) + d[1]
             next = [j, i]
-            #print("Next : " + repr(next))
             newgrid = []
+            # Vérification que le futur cas est viable
             if inBounds(grid, next) and grid[j][i]=="." and not self.isSurround(grid, action[2], [i,j]):
-                #print("1st check")
                 stateOK = True
                 newgrid = list(grid)
                 line = newgrid[j]
                 newline = line[:i] + action[2] + line[i+1:]
                 newgrid[j] = newline
                 for letter, pos in self.lettersTab.items():
-                    #print("5th check")
+                    if self.letterWasFinished(grid, [pos[2], pos[3]], letter):
+                        self.pathsAlreadyDone[letter] = True
                     if letter not in self.pathsAlreadyDone:
                         if letter==action[2] and pathExists(newgrid, [j, i], [pos[3], pos[2]]):
-                            #print("Etat OK - if for letter : " + letter)
                             stateOK = True
                         elif pathExists(newgrid, [pos[1], pos[0]] , [pos[3], pos[2]]):
-                            #print("2nd check for letter : " + letter + " pos : " + repr(pos))
                             stateOK = True
                         else:
-                            #print("3rd check for letter : " + letter + " pos : " + repr(pos))
                             stateOK = False
                             break
                     else:
                         pass
-                        #print("la lettre "+ letter + "est dans pathsAlreadyDone wtf")
+            # Si le cas est viable, on le retourne sous la forme (action, state)
             if stateOK:
                 newstate = self.gridToState(newgrid) + repr(i)+","+repr(j)+","+action[2]
-                #print("newstate = " + newstate)
                 yield (repr(i) + "," + repr(j) + "," + action[2], newstate)
 
+    def letterWasFinished(self, grid, pos, letter):
+    	# Vérifie que la fin d'une lettre est reliée ou non à un path
+        result = False
+        for d in directions:
+            i = pos[0]+d[0]
+            j = pos[1]+d[1]
+            next = [j, i]
+            if inBounds(grid, next) and grid[j][i]==letter:
+                result = True
+                break
+        return result
+        
     def isSurround(self, grid, letter, pos):
-        #print("isSurround")
+    	# Permet de vérifier que deux lettres ne sont pas présentes autour d'une position
+    	# sur un grid. 
         nLettersAround = 0
         for d in directions:
             i = int(pos[0]) + d[0]
@@ -126,22 +114,21 @@ class NumberLink(Problem):
                 nLettersAround += 1
         if nLettersAround >= 2:
             if isNextTo(grid, pos, self.lettersTab[letter][2:4],letter) and nLettersAround < 3:
-                #print("isSurround return False")
                 return False
             else:
-                #print("isSurround return True")
                 return True
         else:
-            #print("isSurround return False 2")
             return False
+
     def gridToState(self, grid):
+    	# Transforme un grid (tableau) en state (string)
         state = ""
         for line in grid:
             state += line
         return state
 
     def stateToGrid(self, state):
-        # Creation du grid
+        # Creation du grid (tableau) à partir d'un state (string)
         grid = []
         visitedLines = 0
         state = state.replace("\n", "")
@@ -159,14 +146,15 @@ class NumberLink(Problem):
         return grid
 
     def printState(self, state):
+    	# Imprime un state (string) sous forme de tableau
         for i in range(0, self.height):
             print(state[(i*self.width):(i+1)*self.width])
         print("")
 
     def seekLetter(self, grid, lettersTab):
-        #print("SeekLetter")
+    	# Recherche une lettre qui n'a pas encore été terminée
         result = ""
-        for letter, pos in lettersTab.items():
+        for letter, pos in sorted(lettersTab.items()):
             nLettersAround = 0
             for d in directions:
                 i = d[0] + pos[2]

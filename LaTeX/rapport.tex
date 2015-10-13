@@ -1,3 +1,7 @@
+\bigskip
+\textit{This paper is the report of the \textbf{Group 10} for the first assignment
+of the course.}
+
 \section{Python AIMA}
 
 \begin{enumerate}
@@ -193,20 +197,67 @@
         swap of the memory). What do you conclude from those experiments
         ?
 	\begin{framed}
-	  \begin{tabular}{l|l|l|l|l}
-	    & Depth, tree & Depth, graph & Breadth, tree & Breadth, graph \\
+        In each row, you will find the execution time, the number of
+        explored nodes and the number of steps from root to solution :
+	  \begin{tabular}{l|p{0.18\linewidth}|p{0.18\linewidth}|p{0.18\linewidth}|p{0.2\linewidth}}
+			& Depth, tree 		& Depth, graph 		& Breadth, tree 	& Breadth, graph \\
 	    \hline
-	    easy & 30ms & 30ms &  & 30ms \\
-	    level2m & 2m56 & 18s31 & & 1m19 \\
-	    level4m & 80ms & 660ms & & 360ms \\
-	    level9m & 210ms & 320ms & & 610ms \\
-	    level10m & 4m21 & 3m25 & & 8m06\\
-	    level15m & 3m07 & 3m52 & & \\
-	    level38s & 120ms & 240ms & & \\
-	    level39s & 1s15& 80ms & & \\
-	    path & 70ms & 120ms & & \\
-	    wiki & 50ms & 90ms & & \\
+	    \hline
+	    easy 	& 20ms			& 30ms 			& 20ms			& 50ms	 		\\
+			& 16			& 16			& 16			& 16			\\
+			& 13			& 13			& 13			& 13			\\
+	    \hline
+	    level2m 	& 24s	 		& 25s			& 1m59			& 2m02		 	\\
+			& 49294			& 49294			& 218858		& 218858		\\
+			& 69			& 69			& 69			& 69			\\
+	    \hline
+	    level4m 	& 310ms		  	& 290ms			& 300ms			& 320ms		 	\\
+			& 1243			& 1243			& 1043			& 1043			\\
+			& 49			& 49			& 49			& 49			\\
+	    \hline
+	    level9m 	& 290ms			& 300ms			& 520ms			& 510ms		 	\\
+			& 1027			& 1027			& 1828			& 1828			\\
+			& 53			& 53			& 53			& 53			\\
+	    \hline
+	    level10m 	& 2m11			& 2m11			& 3m26			& 3m24		 	\\
+			& 245601		& 245601		& 383881		& 383881		\\
+			& 75			& 75			& 75			& 75			\\
+	    \hline
+	    level15m 	& 52s			& 55s			& 1m27			& 1m32		 	\\
+			& 80949			& 80949			& 126768		& 126768		\\
+			& 85			& 85			& 85			& 85			\\
+	    \hline
+	    level38s 	& 190ms			& 190ms			& 240ms			& 250ms		 	\\
+			& 674			& 674			& 758			& 758			\\
+			& 38			& 38			& 38			& 38			\\
+	    \hline
+	    level39s 	& 30ms			& 30ms			& 360ms			& 370ms		 	\\
+			& 49			& 49			& 1614			& 1614			\\
+			& 40			& 40			& 40			& 40			\\
+	    \hline
+	    path 	& 50ms			& 40ms			& 2s			& 2s36		 	\\
+			& 71			& 71			& 1730			& 1730			\\
+			& 71			& 71			& 71			& 71			\\
+	    \hline
+	    wiki 	& 40ms			& 30ms			& 40ms			& 40ms	 		\\
+			& 51			& 51			& 77			& 77			\\
+			& 40			& 40			& 40			& 40			\\
 	  \end{tabular}
+      \bigskip
+      
+      The only case where no reasonable time can be found is for level10m
+      with a breadth-first search. It is explained by the fact that the
+      breadth-first search cover twice as much cases than the same with
+      depth-first. In fact, for this problem, breadth-first search is
+      usually very bad to provide the goal state because it creates first
+      every paths for every letter before trying to reach a possible final
+      state. Conversely, depth-first search will try to find a goal state
+      as quickly as possible by trying one path by letter. \newline
+
+      As you can see, there are no differences between a tree search and a
+      graph search in our implementation because there are no symmetrical
+      states. The time are not perfectly the same because my CPU had other
+      applications to handle at the same time.
 	\end{framed}
 
 \end{enumerate}

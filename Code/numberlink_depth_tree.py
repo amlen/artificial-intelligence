@@ -170,7 +170,7 @@ class NumberLink(Problem):
     def seekLetter(self, grid, lettersTab):
         #print("SeekLetter")
         result = ""
-        for letter, pos in lettersTab.items():
+        for letter, pos in sorted(lettersTab.items()):
             nLettersAround = 0
             for d in directions:
                 i = d[0] + pos[2]
