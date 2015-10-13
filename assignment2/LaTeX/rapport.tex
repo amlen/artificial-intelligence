@@ -1,0 +1,71 @@
+\bigskip
+\textit{This paper is the report of the \textbf{Group 43} for the first assignment
+of the course.}
+
+\section{Search Algorithms and their relations}
+
+\begin{enumerate}
+ \item Give a consistent heuristic for this problem. Prove that it is admissible.
+    \begin{framed}
+      \todo[inline]{Réponse à faire}
+    \end{framed}
+ \item Show on the left maze the states (board positions) that are visited during an
+execution of a uniform-cost graph search. We assume that when different states
+in the fringe have the smallest value, the algorithm chooses the state with
+the smallest coordinate (\textit{i, j}) ((0, 0) being the bottom left position, \textit{i} being the
+horizontal index and \textit{j} the vertical one) using a lexicographical order.
+    \begin{framed}
+      \missingfigure{A maze}
+    \end{framed}
+  \item Show on the right maze the board positions visited by A graph search with
+a manhattan distance heuristic (ignoring walls). A state is visited when it is
+selected in the fringe and expanded. When several states have the smallest
+path cost, this uniform-cost search visits them in the same lexicographical order
+as the one used for uniform-cost graph search.
+    \begin{framed}
+      \missingfigure{A maze}
+    \end{framed}
+
+\end{enumerate}
+
+\section{Sokoban planning problem}
+
+\begin{enumerate}
+ \item As illustrated on Figure 3 some situations cannot lead to a solution. Are there
+other similar situations? If yes, describe them.
+  \begin{framed}
+    \todo[inline]{Réponse à faire}
+  \end{framed}
+  \item Why is it important to identify dead states in your successor function? How
+are you going to implement it?
+  \item Describe possible (non trivial) heuristic(s) to reach a goal state (with reference
+if any). Is(are) your heuristic(s) admissible and/or consistent?
+    \begin{framed}
+      \todo[inline]{Réponse à faire}
+    \end{framed}
+  \item Implement this problem. Extend the \textit{Problem} class and implement the necessary
+methods and other class(es) if necessary. Your file must be named \textit{sokoban.py}.
+You program must print to the standard output a solution to the sokoban instance
+given in argument satisfying the described format. You will receive the name
+of the instance and you have to read from the two files .init and .goal, for
+instance, given instance instance1 you will read from files instance1.init
+and instance1.goal .
+    \begin{framed}
+      \todo[inline]{Réponse à faire}
+    \end{framed}
+  \item Experiment, compare and analyze informed (\textit{astar\_graph\_search}) and unin-
+formed (\textit{breadth\_first\_graph\_search}) graph search of aima-python3 on the 15
+instances of sokoban provided. Report in a table the time, the number of ex-
+plored nodes and the number of steps to reach the solution. Are the number of
+explored nodes always smaller with \textit{astar\_graph\_search}, why?
+When no solution can be found by a strategy in a reasonable time (say 5 min),
+explain the reason (time-out and/or swap of the memory).
+    \begin{framed}
+      \todo[inline]{Réponse à faire}
+    \end{framed}
+  \item What are the performances of your program when you don’t perform dead state
+detection?
+    \begin{framed}
+      \todo[inline]{Réponse à faire}
+    \end{framed}
+\end{enumerate}
