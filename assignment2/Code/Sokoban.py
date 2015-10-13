@@ -8,6 +8,7 @@ from search import *
 
 # LEFT RIGHT UP DOWN
 directions = [[0, -1], [0, 1], [-1, 0], [1, 0]]
+global listOfGoalPos
 
 ###############
 # My function #
@@ -75,9 +76,9 @@ def inBounds(grid, pos):
     return 0 <= pos[0] and pos[0] < len(grid) and 0 <= pos[1] and pos[1] < len(grid[0])
 
 #Check if the state is a KO state
-def isKOState(problem, state, box):
+def isKOState(state, box):
     #Check direction in which i can push
-    if box in problem.listOfGoalPos :
+    if box in listOfGoalPos :
         # If box on goal state, it's never a KO state
         return False
     #Test LEFT AND RIGHT
@@ -101,13 +102,13 @@ def isKOState(problem, state, box):
     return False
 
 # Check if pushing box will lead to a KO state
-def isPushingOK(problem, state, dir, x, y):
+def isPushingOK(state, dir, x, y):
     result = False
     state.grid[x] = state.grid[x][:y] + " " + state.grid[x][y+1:]
     newBoxX = x + dir[0]
     newBoxY = y + dir[1]
     state.grid[newBoxX] = state.grid[newBoxX][:newBoxY] + "$" + state.grid[newBoxX][newBoxY+1:]
-    result = not isKOState(problem, state, (newBoxX, newBoxY))
+    result = not isKOState(state, (newBoxX, newBoxY))
     state.grid[newBoxX] = state.grid[newBoxX][:newBoxY] + " " + state.grid[newBoxX][newBoxY+1:]
     state.grid[x] = state.grid[x][:y] + "$" + state.grid[x][y+1:]
     return result
@@ -148,6 +149,27 @@ def generateSuccessor(state, dir):
     newState.grid[newState.avatarPos[0]] = newState.grid[newState.avatarPos[0]][:newState.avatarPos[1]] + "@" + newState.grid[newState.avatarPos[0]][newState.avatarPos[1]+1:]
     return newState
 
+
+# Return the minimum hamilton distance to reach a goal
+def minDistOfBoxToGoal(state, box):
+    best = len(state.grid) + len(state.grid[0])
+    for goal in listOfGoalPos:
+        best = min(best, (abs(goal[0] - box[0]) + abs(goal[1] - box[1])))
+    return best
+
+# Heuristic function
+# Minimal value will be explored first !!!
+def heuristicFunction(node):
+    score = 0
+    for box in node.state.listOfBoxesPos:
+        #if box not in listOfGoalPos:
+        #    score += 50 # Solve everything but 04
+        #score += minDistOfBoxToGoal(node.state, box) * 50 #Fails 04 and 15
+        #score += minDistOfBoxToGoal(node.state, box) * len(node.state.grid) * len(node.state.grid[0]) #Fails 04 and 15
+        score += minDistOfBoxToGoal(node.state, box) * len(node.state.grid) # Passes everything
+    return score
+
+
 #################
 #   My classes  #
 #################
@@ -155,13 +177,14 @@ def generateSuccessor(state, dir):
 class Sokoban(Problem):
     def __init__(self, init):
         # Extract state from file
-        self.listOfGoalPos = readStateFromGoal(init + ".goal")
+        global listOfGoalPos
+        listOfGoalPos = readStateFromGoal(init + ".goal")
         initState = readStateFromInit(init + ".init")
         # Extend super init
         super().__init__(initState)
 
     def goal_test(self, state):
-        for elem in self.listOfGoalPos:
+        for elem in listOfGoalPos:
             if not elem in state.listOfBoxesPos:
                 return False
         return True
@@ -171,7 +194,7 @@ class Sokoban(Problem):
         for i in range(0, len(directions)):
             x = state.avatarPos[0] + directions[i][0]
             y = state.avatarPos[1] + directions[i][1]
-            if inBounds(state.grid, (x, y)) and (state.grid[x][y] == ' ' or (state.grid[x][y] == '$' and canPushBox(state.grid, state.avatarPos, (x,y)) and isPushingOK(self, state, directions[i], x, y))):
+            if inBounds(state.grid, (x, y)) and (state.grid[x][y] == ' ' or (state.grid[x][y] == '$' and canPushBox(state.grid, state.avatarPos, (x,y)) and isPushingOK(state, directions[i], x, y))):
                 #Yield result
                 yield (i, generateSuccessor(state, directions[i]))
 
@@ -213,8 +236,8 @@ now = time.time()
 problem = Sokoban(sys.argv[1])
 
 # Solve using bfs search
-node = depth_first_graph_search(problem)
-# node = astar_graph_search(problem, TODO FUNCTION H)
+#node = depth_first_graph_search(problem)
+node = astar_graph_search(problem, heuristicFunction)
 # Print
 path = node.path()
 path.reverse()
