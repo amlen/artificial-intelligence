@@ -6,6 +6,10 @@ from copy import deepcopy
 from os import listdir, system
 from search import *
 
+
+# LEFT RIGHT UP DOWN
+directions = [[0, -1], [0, 1], [-1, 0], [1, 0]]
+
 ###############
 # My function #
 ###############
@@ -25,21 +29,21 @@ def readGridFromFile(Texte):
             grid[i] = grid[i][1 : len(grid[i])-1]
         return grid
 
-# Read input file and return a state containing the data
+# Read goal file and return a grid containing the data
 def readStateFromGoal(goal):
 
     grid = readGridFromFile(goal)
     listOfGoalPos = [] #Orginal position of boxes
-    j = 0
+    i = 0
     for line in grid:
-        for i in range(0, len(line)):
-            if line[i] == ".":
+        for j in range(0, len(line)):
+            if line[j] == ".":
                 #Avatar
                 listOfGoalPos.append((i, j))
-        j+=1
+        i+=1
     return listOfGoalPos
 
-# Read input file and return a state containing the data
+# Read init file and return a state containing the data
 def readStateFromInit(init):
     with open(init, "r") as file:
         # Lecture du fichier
@@ -48,16 +52,16 @@ def readStateFromInit(init):
         avatarPos = (0,0) #Original position of the avatar
         listOfBoxesPos = [] #Orginal position of boxes
         #Read grid for important elem
-        j = 0
+        i = 0
         for line in grid:
-            for i in range(0, len(line)):
-                if line[i] == "@":
+            for j in range(0, len(line)):
+                if line[j] == "@":
                     #Avatar
                     avatarPos = (i, j)
-                elif line[i] == "$":
+                elif line[j] == "$":
                     #Box
                     listOfBoxesPos.append((i, j))
-            j+=1
+            i+=1
     return State(grid, listOfBoxesPos, avatarPos)
 
 #Add a line of wall
@@ -67,6 +71,40 @@ def addALineOfWall(string, length):
     string += "\n"
     return string
 
+#Check if position is inbound
+def inBounds(grid, pos):
+    return 0 <= pos[0] and pos[0] < len(grid) and 0 <= pos[1] and pos[1] < len(grid[0])
+
+#Check if the state is a KO state
+def isKOState(state, box):
+    #Check direction in which i can push
+    if box in state.listOfGoalPos :
+        # If box on goal state, it's never a KO state
+        return False
+    freedom = 0
+    for d in directions:
+        i = box[0] + d[0]
+        j = box[1] + d[1]
+        if inBounds(state.grid, (i, j)) and state.grid[i][j] == " ":
+            freedom += 1;
+    return freedom < 3
+
+#Check if two position are adjacent
+def arePosAdjacent(posA, posB):
+    distI = abs(posA[0] - posB[0])
+    distJ = abs(posA[1] - posB[1])
+    return (distI + distJ) < 2
+
+#Check if char can push the box from this position
+def canPushBox(grid, char, box):
+    if arePosAdjacent(char, box):
+        i = 2*box[0] - char[0]
+        j = 2*box[1] - char[1]
+        if inBounds(grid, (i, j)) and grid[i][j] == " ":
+            return True
+    return False
+
+
 #################
 #   My classes  #
 #################
@@ -74,16 +112,19 @@ def addALineOfWall(string, length):
 class Sokoban(Problem):
     def __init__(self, init):
         # Extract state from file
+        self.listOfGoalPos = readStateFromGoal(init + ".goal")
         initState = readStateFromInit(init + ".init")
-        gridGoal = readStateFromGoal(init + ".goal")
         #Debug print
         print(initState)
-        print(gridGoal)
+        print(initState.__repr__())
         # Extend super init
         super().__init__(initState)
 
     def goal_test(self, state):
-        pass
+        for elem in self.listOfGoalPos:
+            if not elem in state.listOfBoxesPos :
+                return False
+        return True
 
     def successor(self, state):
         pass
@@ -123,9 +164,10 @@ class State:
 # Init
 now = time.time()
 problem = Sokoban(sys.argv[1])
+
 '''
 # Solve using bfs search
-node = depth_first_tree_search(problem)
+node = astar_graph_search(problem, TODO FUNCTION H)
 # Print
 path = node.path()
 path.reverse()
