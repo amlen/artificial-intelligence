@@ -102,6 +102,7 @@ def isKOState(state, box):
     return False
 
 # Check if pushing box will lead to a KO state
+# Pre : box is pushable
 def isPushingOK(state, dir, x, y):
     result = False
     state.grid[x] = state.grid[x][:y] + " " + state.grid[x][y+1:]
@@ -129,7 +130,7 @@ def canPushBox(grid, char, box):
     return False
 
 #Generate successor from state
-#Pre : Successor can be generated
+#Pre : Successor can be generated => if box it can be pushed
 def generateSuccessor(state, dir):
     newState = deepcopy(state)
     #Calculate new avatar pos
@@ -149,6 +150,12 @@ def generateSuccessor(state, dir):
     newState.grid[newState.avatarPos[0]] = newState.grid[newState.avatarPos[0]][:newState.avatarPos[1]] + "@" + newState.grid[newState.avatarPos[0]][newState.avatarPos[1]+1:]
     return newState
 
+#Calculate the minimum position from the avatar to a box
+def calculateDistFromBoxes(state):
+    best = len(state.grid) + len(state.grid[0])
+    for box in state.listOfBoxesPos:
+        best = min(best, (abs(box[0] - state.avatarPos[0]) + abs(box[1] - state.avatarPos[1])))
+    return best
 
 # Return the minimum hamilton distance to reach a goal
 def minDistOfBoxToGoal(state, box):
@@ -162,11 +169,8 @@ def minDistOfBoxToGoal(state, box):
 def heuristicFunction(node):
     score = 0
     for box in node.state.listOfBoxesPos:
-        #if box not in listOfGoalPos:
-        #    score += 50 # Solve everything but 04
-        #score += minDistOfBoxToGoal(node.state, box) * 50 #Fails 04 and 15
-        #score += minDistOfBoxToGoal(node.state, box) * len(node.state.grid) * len(node.state.grid[0]) #Fails 04 and 15
         score += minDistOfBoxToGoal(node.state, box) * len(node.state.grid) # Passes everything
+    score += calculateDistFromBoxes(node.state)
     return score
 
 
@@ -241,6 +245,7 @@ node = astar_graph_search(problem, heuristicFunction)
 # Print
 path = node.path()
 path.reverse()
+#print(len(path))
 for n in path:
     print(n.state)  # assuming that the __str__ function of states output the correct format
 
