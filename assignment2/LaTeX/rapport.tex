@@ -100,8 +100,9 @@ and instance1.goal .
     \end{framed}
   \item Experiment, compare and analyze informed (\textit{astar\_graph\_search}) and unin-
 formed (\textit{breadth\_first\_graph\_search}) graph search of aima-python3 on the 15
-instances of sokoban provided. Report in a table the time, the number of ex-
-plored nodes and the number of steps to reach the solution. Are the number of
+instances of sokoban provided. Report in a table the time, the number of
+explored nodes and the number of steps to reach the solution. Are the
+number of
 explored nodes always smaller with \textit{astar\_graph\_search}, why?
 When no solution can be found by a strategy in a reasonable time (say 5 min),
 explain the reason (time-out and/or swap of the memory).
@@ -125,7 +126,10 @@ explain the reason (time-out and/or swap of the memory).
     					& 146013 	& 802991 \\
     					& 68		& 56 \\
     	\end{tabular}
-      \todo[inline]{Réponse à faire}
+
+        The number of explored with an A* graph search is always smaller or
+        equals to the BFS, smaller if the heuristic is good and put on the
+        worst cases a big weight ; equals if the heuristic is very bad.
     \end{framed}
   \item What are the performances of your program when you don’t perform dead state
 detection?
