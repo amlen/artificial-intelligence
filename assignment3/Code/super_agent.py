@@ -40,6 +40,23 @@ def getIntegerSign(int):
         return 1
     return -1
 
+def calculate_maxMinMaxDepth(board):
+    #Count remaining number of tower
+    nbTower = 0
+    for i in range(board.rows):
+        for j in range(board.columns):
+            if not board.m[i][j] == 0:
+                nbTower += 1
+    #Compute max depth
+    print(nbTower)
+    maxDepth = 0
+    currentMult = 1
+    while currentMult < 25000 and nbTower > 0:
+        currentMult *= nbTower
+        nbTower -= 1
+        maxDepth += 1
+    return maxDepth-1
+
 #Pre the two tower are adjacent
 def couldTowerXJumpOverTowerY(X, Y):
     #Drop if same sign or if can't jump on each other due to value too big
@@ -128,6 +145,8 @@ class Agent:
         will perform.
         """
         self.time_left = time_left
+        self.maxMinMaxDepth = calculate_maxMinMaxDepth(board);
+        print(self.maxMinMaxDepth)
         newBoard = avalam.Board(board.get_percepts(player==avalam.PLAYER2))
         state = (newBoard, player, step)
         return minimax.search(state, self)
