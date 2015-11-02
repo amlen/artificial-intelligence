@@ -20,6 +20,69 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 import avalam
 import minimax
 
+################
+# My Variables #
+################
+
+#On board (ligne, collumn)
+#TOPLEFT UP TOPRIGHT LEFT RIGHT DOWNLEFT DOWN DOWNRIGHT
+directions = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
+
+##############
+# My Methods #
+##############
+
+def inBounds(board, pos):
+    return 0 <= pos[0] and pos[0] < len(board.m) and 0 <= pos[1] and pos[1] < len(board.m[0])
+
+def getIntegerSign(int):
+    if(int > 0):
+        return 1
+    return -1
+
+#Pre the two tower are adjacent
+def couldTowerXJumpOverTowerY(X, Y):
+    #Drop if same sign or if can't jump on each other due to value too big
+    if X == 0 or Y == 0 or (abs(X) + abs(Y)) > 5:
+        return False
+    return True
+
+def isIsolated(board, posX, posY):
+    #Calculate remaining value for tower
+    tower = board.m[posX][posY]
+    #See if the tower is isolated
+    for dir in directions:
+        testX = posX + dir[0]
+        testY = posY + dir[1]
+        if inBounds(board, (testX, testY)) and couldTowerXJumpOverTowerY(board.m[testX][testY], tower):
+            return False
+    return True
+
+def calculate_accurate_score(board):
+    score = 0
+    #Score based on pure number of stones
+    #Score for possession of undisputable tower
+    for i in range(board.rows):
+        for j in range(board.columns):
+            #Empty position don't count in the score
+            if board.m[i][j] == 0:
+                pass
+            #Score for possession of undisputable max level tower
+            elif board.m[i][j] == -board.max_height or board.m[i][j] == board.max_height:
+                score += getIntegerSign(board.m[i][j])*15 # 15 points only for max level tower so merging two isolated tower is not considered a better move
+            #score for giving the possibility of having undisputable tower
+            #Score for possesion of an undisputable isolated tower
+            elif isIsolated(board, i, j):
+                score += getIntegerSign(board.m[i][j])*10 # 10 point for each isolated tower
+            #Basic score for having more tower than the opponnent
+            else:
+                score += getIntegerSign(board.m[i][j])
+    return score
+
+############
+# My Agent #
+############
+
 class Agent:
     """This is the skeleton of an agent to play the Avalam game."""
 
@@ -38,7 +101,6 @@ class Agent:
         for action in oldBoard.get_actions():
             newBoard = oldBoard.clone()
             newBoard.play_action(action)
-            print(action, self.evaluate((newBoard, -oldPlayer, oldStepNbr+1)));
             yield (action, (newBoard, -oldPlayer, oldStepNbr+1))
 
     def cutoff(self, state, depth):
@@ -50,19 +112,14 @@ class Agent:
             return True
         else:
             return False
-            
+
 
     def evaluate(self, state):
         """The evaluate function must return an integer value
         representing the utility function of the board.
         """
         (oldBoard, oldPlayer, oldStepNbr) = state
-        if oldBoard.get_score() < 0:
-            return -1
-        elif oldBoard.get_score() > 0:
-            return 1
-        else:
-            return 0
+        return calculate_accurate_score(oldBoard)
 
     def play(self, board, player, step, time_left):
         """This function is used to play a move according
