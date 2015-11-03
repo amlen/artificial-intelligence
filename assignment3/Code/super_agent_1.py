@@ -39,15 +39,13 @@ def inBounds(board, pos):
 def getIntegerSign(int):
     if(int > 0):
         return 1
-    elif (int < 0):
-        return -1
-    return 0
+    return -1
 
 def calculate_maxMinMaxDepth(steps, time_left):
-    if(time_left < 300):
+    if(time_left < 50):
         return 2
     else:
-        return (int)(2 + (steps/20))
+        return (int)(2 + (steps/15))
 
 #Pre the two tower are adjacent
 def couldTowerXJumpOverTowerY(X, Y):
@@ -56,17 +54,7 @@ def couldTowerXJumpOverTowerY(X, Y):
         return False
     return True
 
-def isTowerAIsolatedFromEnnemyThroughTowerB(board, tower, posX, posY):
-    towerCheck = board.m[posX][posY]
-    for dir in directions:
-        testX = posX + dir[0]
-        testY = posY + dir[1]
-        if inBounds(board, (testX, testY)) and not getIntegerSign(board.m[testX][testY]) == getIntegerSign(towerCheck):
-            if(abs(board.m[testX][testY]) + abs(towerCheck) + abs(tower) <= board.max_height):
-                return False
-    return True
-
-def isTowerIsolated(board, posX, posY):
+def isIsolated(board, posX, posY):
     #Calculate remaining value for tower
     tower = board.m[posX][posY]
     #See if the tower is isolated
@@ -74,25 +62,12 @@ def isTowerIsolated(board, posX, posY):
         testX = posX + dir[0]
         testY = posY + dir[1]
         if inBounds(board, (testX, testY)) and couldTowerXJumpOverTowerY(board.m[testX][testY], tower):
-            if not(getIntegerSign(board.m[testX][testY]) == getIntegerSign(tower) and isTowerAIsolatedFromEnnemyThroughTowerB(board, tower, testX, testY)):
-                return False
+            return False
     return True
 
-#Changer aime allier qui le complete et hais ennemis qui le complete
-def calculateNeighborScore(board, posX, posY):
-    #Calculate tower's color
-    color = getIntegerSign(board.m[posX][posY])
-    #See if the tower is isolated
-    counter = 0
-    for dir in directions:
-        testX = posX + dir[0]
-        testY = posY + dir[1]
-        if inBounds(board, (testX, testY)) and getIntegerSign(board.m[testX][testY]) == color:
-            counter += getIntegerSign(board.m[testX][testY])
-    return counter
-
-def calculate_accurate_score(board):
+def calculate_accurate_score(board, player):
     score = 0
+    #Score based on pure number of stones
     #Score for possession of undisputable tower
     for i in range(board.rows):
         for j in range(board.columns):
@@ -101,14 +76,14 @@ def calculate_accurate_score(board):
                 pass
             #Score for possession of undisputable max level tower
             elif board.m[i][j] == -board.max_height or board.m[i][j] == board.max_height:
-                score += getIntegerSign(board.m[i][j])*12 # 15 points only for max level tower so merging two isolated tower is not considered a better move
+                score += getIntegerSign(board.m[i][j])*15 # 15 points only for max level tower so merging two isolated tower is not considered a better move
+            #score for giving the possibility of having undisputable tower
             #Score for possesion of an undisputable isolated tower
-            if(isTowerIsolated(board, i, j)):
+            elif isIsolated(board, i, j):
                 score += getIntegerSign(board.m[i][j])*10 # 10 point for each isolated tower
-            #Score for having an ennemy tower surrounded by only tower of yours that can jump on it
             #Basic score for having more tower than the opponnent
             else:
-                score += calculateNeighborScore(board, i, j)
+                score += getIntegerSign(board.m[i][j])
     return score
 
 ############
@@ -153,7 +128,7 @@ class Agent:
         representing the utility function of the board.
         """
         (oldBoard, oldPlayer, oldStepNbr) = state
-        return calculate_accurate_score(oldBoard)
+        return calculate_accurate_score(oldBoard, oldPlayer)
 
     def play(self, board, player, step, time_left):
         """This function is used to play a move according

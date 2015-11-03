@@ -51,46 +51,65 @@ def calculate_maxMinMaxDepth(steps, time_left):
 
 #Pre the two tower are adjacent
 def couldTowerXJumpOverTowerY(X, Y):
-    #Drop if same sign or if can't jump on each other due to value too big
     if X == 0 or Y == 0 or (abs(X) + abs(Y)) > 5:
         return False
     return True
 
-def isTowerAIsolatedFromEnnemyThroughTowerB(board, tower, posX, posY):
-    towerCheck = board.m[posX][posY]
-    for dir in directions:
-        testX = posX + dir[0]
-        testY = posY + dir[1]
-        if inBounds(board, (testX, testY)) and not getIntegerSign(board.m[testX][testY]) == getIntegerSign(towerCheck):
-            if(abs(board.m[testX][testY]) + abs(towerCheck) + abs(tower) <= board.max_height):
-                return False
-    return True
-
-def isTowerIsolated(board, posX, posY):
-    #Calculate remaining value for tower
-    tower = board.m[posX][posY]
-    #See if the tower is isolated
+def isTowerAIsolatedFromEnnemyThroughTowerB(board, tower, towerCheck, posX, posY):
+    #Init
+    color = getIntegerSign(tower)
+    allyList = []
+    ennemyList = []
+    #Init ally and ennemy List
     for dir in directions:
         testX = posX + dir[0]
         testY = posY + dir[1]
         if inBounds(board, (testX, testY)) and couldTowerXJumpOverTowerY(board.m[testX][testY], tower):
-            if not(getIntegerSign(board.m[testX][testY]) == getIntegerSign(tower) and isTowerAIsolatedFromEnnemyThroughTowerB(board, tower, testX, testY)):
-                return False
+            if getIntegerSign(board.m[testX][testY]) == color:
+                allyList.append((board.m[testX][testY], testX, testY))
+            elif getIntegerSign(board.m[testX][testY]) == -color:
+                ennemyList.append((board.m[testX][testY], testX, testY))
+    #Remove the tower we want to check if it's present, it can't help
+    allyList.remove(towerCheck)
+    return allyList.__len__() + ennemyList.__len__() > 1
+
+#Can be betterified
+def isTowerIsolated(board, allyList, tower, posX, posY):
+    #See if the tower is isolated
+    for allyTower, testX, testY in allyList:
+        if not isTowerAIsolatedFromEnnemyThroughTowerB(board, allyTower, (tower, posX, posY), testX, testY):
+            return False
     return True
 
-#Changer aime allier qui le complete et hais ennemis qui le complete
-def calculateNeighborScore(board, posX, posY):
-    #Calculate tower's color
-    color = getIntegerSign(board.m[posX][posY])
-    #See if the tower is isolated
+# J'aime pas etre encercler mais j'aime encercler mon ennemy
+def calculateNeighborScore(color, allyList, ennemyList):
     counter = 0
+    counter += allyList.__len__()
+    return color*counter
+
+#Pre not a max height tower or an empty pos
+def calculateTowerScoreDependingOnNeighbor(board, posX, posY):
+    #Init
+    tower = board.m[posX][posY]
+    color = getIntegerSign(board.m[posX][posY])
+    allyList = []
+    ennemyList = []
+    #Init ally and ennemy List
     for dir in directions:
         testX = posX + dir[0]
         testY = posY + dir[1]
-        if inBounds(board, (testX, testY)) and getIntegerSign(board.m[testX][testY]) == color:
-            counter += getIntegerSign(board.m[testX][testY])
-    return counter
+        if inBounds(board, (testX, testY)) and couldTowerXJumpOverTowerY(board.m[testX][testY], tower):
+            if getIntegerSign(board.m[testX][testY]) == color:
+                allyList.append((board.m[testX][testY], testX, testY))
+            elif getIntegerSign(board.m[testX][testY]) == -color:
+                ennemyList.append((board.m[testX][testY], testX, testY))
+    #Score for possesion of an undisputable isolated tower
+    if ennemyList.__len__() == 0 and isTowerIsolated(board, allyList, tower, posX, posY):
+        return color*(14-abs(tower)) # entre 10 et 13 point for being an isolated tower
+    #NeighborHodd score
+    return calculateNeighborScore(color, allyList, ennemyList)
 
+#Make it very good to have isolated tower of small value !
 def calculate_accurate_score(board):
     score = 0
     #Score for possession of undisputable tower
@@ -101,14 +120,12 @@ def calculate_accurate_score(board):
                 pass
             #Score for possession of undisputable max level tower
             elif board.m[i][j] == -board.max_height or board.m[i][j] == board.max_height:
-                score += getIntegerSign(board.m[i][j])*12 # 15 points only for max level tower so merging two isolated tower is not considered a better move
-            #Score for possesion of an undisputable isolated tower
-            if(isTowerIsolated(board, i, j)):
-                score += getIntegerSign(board.m[i][j])*10 # 10 point for each isolated tower
-            #Score for having an ennemy tower surrounded by only tower of yours that can jump on it
-            #Basic score for having more tower than the opponnent
+                score += getIntegerSign(board.m[i][j])*15 # 12 points only for max level tower so merging two isolated tower is not considered a better move
+            #Calculate score of a tower depending on it's neighbor
             else:
-                score += calculateNeighborScore(board, i, j)
+                score += calculateTowerScoreDependingOnNeighbor(board, i, j)
+                #Score for having more tower than your opponent
+                score += getIntegerSign(board.m[i][j])
     return score
 
 ############
