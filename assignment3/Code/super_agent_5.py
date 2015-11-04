@@ -75,21 +75,32 @@ def isTowerAIsolatedFromEnnemyThroughTowerB(board, tower, towerCheck, posX, posY
                 ennemyList.append((board.m[testX][testY], testX, testY))
     #Remove the tower we want to check if it's present, it can't help
     allyList.remove(towerCheck)
-    return allyList.__len__() + ennemyList.__len__() > 1
+    #Check if tower is isolated
+    for ennemyTower, _, _ in ennemyList:
+        if(abs(ennemyTower) + abs(towerCheck[0]) + abs(tower) <= board.max_height):
+            safe = False
+            for ally in allyList:
+                if couldTowerXJumpOverTowerY(abs(ennemyTower) + abs(tower), ally[0]):
+                    safe = True
+            if not safe:
+                return False
+    return True
 
 #Can be betterified
 def isTowerIsolated(board, allyList, tower, posX, posY):
     #See if the tower is isolated
     for allyTower, testX, testY in allyList:
-        if not isTowerAIsolatedFromEnnemyThroughTowerB(board, allyTower, (tower, posX, posY), testX, testY):
+        if couldTowerXJumpOverTowerY(abs(allyTower)+1, tower) and not isTowerAIsolatedFromEnnemyThroughTowerB(board, allyTower, (tower, posX, posY), testX, testY):
             return False
     return True
 
-# J'aime pas etre encercler mais j'aime encercler mon ennemy
-def calculateNeighborScore(color, allyList, ennemyList):
-    counter = 0
-    counter += allyList.__len__() - ennemyList.__len__()
-    return max(-1, min(1, color*counter))
+def calculateNeighborScore(tower, color, allyList, ennemyList):
+    if tower == 1 or tower == 2:
+        counter = allyList.__len__() - ennemyList.__len__()
+        return tower * max(-1, min(1, color*counter))
+    elif tower == 3:
+        return 2 * color * (allyList.__len__()+1) / (ennemyList.__len__()+1)
+
 
 #Pre not a max height tower or an empty pos
 def calculateTowerScoreDependingOnNeighbor(player, board, posX, posY):
@@ -108,13 +119,18 @@ def calculateTowerScoreDependingOnNeighbor(player, board, posX, posY):
             elif getIntegerSign(board.m[testX][testY]) == -color:
                 ennemyList.append((board.m[testX][testY], testX, testY))
     #Score for possesion of an undisputable isolated tower
-    if ennemyList.__len__() == 0 and isTowerIsolated(board, allyList, tower, posX, posY):
-        return color*5 # entre 10 et 13 point for being an isolated tower
+    if ennemyList.__len__() == 0:
+        if(allyList.__len__() == 0):
+            return color*6 # entre 10 et 13 point for being an isolated tower
+        elif isTowerIsolated(board, allyList, tower, posX, posY):
+            return color*4
     #NeighborHodd score
-    if(abs(tower) == 4):
-        return player*-4
+    for value, _, _ in ennemyList:
+        if value == (-color)*(5-abs(tower)):
+            return player*-3
     else:
-        return calculateNeighborScore(color, allyList, ennemyList)*(abs(tower)-1)
+        #return calculateNeighborScore(abs(tower), color, allyList, ennemyList)
+        return calculateNeighborScore(abs(tower), color, allyList, ennemyList)
 
 #Make it very good to have isolated tower of small value !
 def calculate_accurate_score(player, board):
