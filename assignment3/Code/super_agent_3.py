@@ -44,6 +44,8 @@ def getIntegerSign(int):
     return 0
 
 def calculate_maxMinMaxDepth(steps, time_left):
+    if(time_left == None):
+        return 2
     if(time_left < 300):
         return 2
     else:
