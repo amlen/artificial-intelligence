@@ -1,4 +1,3 @@
-
 """
 MiniMax and AlphaBeta algorithms.
 Author: Cyrille Dejemeppe <cyrille.dejemeppe@uclouvain.be>
@@ -17,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 """
-
 import sys
+
 global steps
 
 class Game:
@@ -45,7 +44,25 @@ class Game:
 
 inf = float("inf")
 
+def insertInLexicalOrder(actionList, action):
+    (A, B, C, D) = action
+    newStr = str(A) + " " + str(B) + " " + str(C) + " " + str(D)
+    i = 0
+    while i in range(0, len(actionList)):
+        if(newStr < actionList[i]):
+            break
+        i+=1
+    actionList.insert(i, newStr)
+    return i
 
+def getStringFromActionList(actionList):
+    res = ""
+    for action in actionList:
+        res += action + " "
+    res.rstrip()
+    return res
+
+#Doesn't evaluate two times the same state
 def search(state, game, prune=True):
     """Perform a MiniMax/AlphaBeta search and return the best action.
 
@@ -55,18 +72,28 @@ def search(state, game, prune=True):
     prune -- whether to use AlphaBeta pruning
 
     """
+    dictionnary = {}
 
-    def max_value(state, alpha, beta, depth):
+    def max_value(state, alpha, beta, depth, actionList):
         if game.cutoff(state, depth):
-            global steps
-            steps += 1
-            sys.stdout.write("\rBoards evaluated : {0} >> ".format(steps))
-            sys.stdout.flush()
-            return game.evaluate(state), None
+            # Return score
+            key = getStringFromActionList(actionList)
+            if key not in dictionnary:
+                score = game.evaluate(state)
+                dictionnary[key] = score
+                return score, None
+            return dictionnary[key], None
         val = -inf
         action = None
         for a, s in game.successors(state):
-            v, _ = min_value(s, alpha, beta, depth + 1)
+            if depth == 0:
+                global steps
+                steps += 1
+                sys.stdout.write("\rAction child of root : {0} >> ".format(steps))
+                sys.stdout.flush()
+            popIndex = insertInLexicalOrder(actionList, a)
+            v, _ = min_value(s, alpha, beta, depth + 1, actionList)
+            actionList.pop(popIndex)
             if v > val:
                 val = v
                 action = a
@@ -76,17 +103,21 @@ def search(state, game, prune=True):
                     alpha = max(alpha, v)
         return val, action
 
-    def min_value(state, alpha, beta, depth):
+    def min_value(state, alpha, beta, depth, actionList):
         if game.cutoff(state, depth):
-            global steps
-            steps += 1
-            sys.stdout.write("\rBoards evaluated : {0} >> ".format(steps))
-            sys.stdout.flush()
-            return game.evaluate(state), None
+            # Return score
+            key = getStringFromActionList(actionList)
+            if key not in dictionnary:
+                score = game.evaluate(state)
+                dictionnary[key] = score
+                return score, None
+            return dictionnary[key], None
         val = inf
         action = None
         for a, s in game.successors(state):
-            v, _ = max_value(s, alpha, beta, depth + 1)
+            popIndex = insertInLexicalOrder(actionList, a)
+            v, _ = max_value(s, alpha, beta, depth + 1, actionList)
+            actionList.pop(popIndex)
             if v < val:
                 val = v
                 action = a
@@ -98,5 +129,5 @@ def search(state, game, prune=True):
 
     global steps
     steps = 0
-    _, action = max_value(state, -inf, inf, 0)
+    _, action = max_value(state, -inf, inf, 0, [])
     return action
