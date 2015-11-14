@@ -1,4 +1,3 @@
-
 """
 MiniMax and AlphaBeta algorithms.
 Author: Cyrille Dejemeppe <cyrille.dejemeppe@uclouvain.be>
@@ -18,8 +17,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 """
 
-import sys
-global steps
 
 class Game:
 
@@ -58,10 +55,6 @@ def search(state, game, prune=True):
 
     def max_value(state, alpha, beta, depth):
         if game.cutoff(state, depth):
-            global steps
-            steps += 1
-            sys.stdout.write("\rBoards evaluated : {0} >> ".format(steps))
-            sys.stdout.flush()
             return game.evaluate(state), None
         val = -inf
         action = None
@@ -78,10 +71,6 @@ def search(state, game, prune=True):
 
     def min_value(state, alpha, beta, depth):
         if game.cutoff(state, depth):
-            global steps
-            steps += 1
-            sys.stdout.write("\rBoards evaluated : {0} >> ".format(steps))
-            sys.stdout.flush()
             return game.evaluate(state), None
         val = inf
         action = None
@@ -96,7 +85,5 @@ def search(state, game, prune=True):
                     beta = min(beta, v)
         return val, action
 
-    global steps
-    steps = 0
     _, action = max_value(state, -inf, inf, 0)
     return action
