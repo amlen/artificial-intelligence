@@ -433,7 +433,7 @@ if __name__ == "__main__":
         if args.gui:
             try:
                 import gui
-                subprocess.Popen(["python", "SimpleHTTPServer.py"],
+                subprocess.Popen(["python3", "SimpleHTTPServer.py"],
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
                 viewer = gui.WebViewer()
