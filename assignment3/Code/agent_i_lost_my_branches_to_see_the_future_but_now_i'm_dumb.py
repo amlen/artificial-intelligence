@@ -20,7 +20,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 """
 
-import avalamFinal
+import avalamDropper
 import minimaxFinal
 
 ################
@@ -46,8 +46,6 @@ def getIntegerSign(int):
 def calculate_maxMinMaxDepth(steps, time_left):
     if(time_left == None):
         return 2
-    if time_left < 100:
-        return 2
     if time_left < 150 and steps > 20:
         return 3
     if time_left < 150:
@@ -58,10 +56,6 @@ def calculate_maxMinMaxDepth(steps, time_left):
         return 3
     if steps > 30:
         return 50
-    if time_left > 600 and steps > 19:
-        return 5
-    if time_left > 900 and steps > 14:
-        return 4
     if steps > 19:
         return 4
     if steps > 7:
@@ -125,7 +119,7 @@ def towerScore(board, posX, posY):
     if ennemyList.__len__() == 0 and allyList.__len__() == 0:
         return color*5 # 100 % Isolated, fully gained point
     #Check for snapback on tower
-    if not (abs(tower) == 3 or abs(tower) == 4) or allyList.__len__() == 0 : #Else tower of level three would too easily be in snapback
+    if not abs(tower) == 3 or allyList.__len__() == 0 : #Else tower of level three would too easily be in snapback
         snapback = True
         for val, x, y in allyList:
             if not couldSnapBackWork(board, (tower, posX, posY), val, x, y):
@@ -181,7 +175,7 @@ class Agent:
         """
         #Return result
         (oldBoard, oldPlayer, oldStepNbr) = state
-        for action in oldBoard.get_sorted_actions(oldPlayer):
+        for action in oldBoard.get_sorted_actions():
             newBoard = oldBoard.clone()
             newBoard.play_action(action)
             yield (action, (newBoard, -oldPlayer, oldStepNbr+1))
@@ -212,14 +206,14 @@ class Agent:
         will perform.
         """
         #Launch
-        newBoard = avalamFinal.Board(board.get_percepts(player==avalamFinal.PLAYER2))
+        newBoard = avalamDropper.Board(board.get_percepts(player==avalamDropper.PLAYER2))
         state = (newBoard, player, step)
-        self.maxMinMaxDepth = max(calculate_maxMinMaxDepth(step, time_left), newBoard.estimate_depth_safety() + 1)
+        self.maxMinMaxDepth = calculate_maxMinMaxDepth(step, time_left) + newBoard.estimate_depth_safety()
         #Debug
         print("Depth :", self.maxMinMaxDepth)
         print("Time left : ", time_left)
 
-        return minimaxFinal.search(state, self, time_left)
+        return minimaxFinal.search(state, self)
 
 if __name__ == "__main__":
-    avalamFinal.agent_main(Agent())
+    avalamDropper.agent_main(Agent())

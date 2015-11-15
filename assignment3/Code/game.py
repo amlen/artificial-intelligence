@@ -125,6 +125,8 @@ class ConsoleViewer(Viewer):
             print("Player 1" if winner > 0 else "Player 2", "has won!")
         if reason:
             print("Reason:", reason)
+        else:
+            print("Score : ", winner)
 
 
 class Trace:

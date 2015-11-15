@@ -70,28 +70,6 @@ def couldTowerXJumpOverTowerY(X, Y):
         return False
     return True
 
-#Pre not a max height tower or an empty pos
-def towerScoreEnd(player, board, posX, posY):
-    #Init
-    tower = board.m[posX][posY]
-    color = getIntegerSign(tower)
-    allyList = []
-    ennemyList = []
-    #Init ally and ennemy List
-    for dir in directions:
-        testX = posX + dir[0]
-        testY = posY + dir[1]
-        if board.inBounds(testX, testY) and couldTowerXJumpOverTowerY(board.m[testX][testY], tower):
-            if getIntegerSign(board.m[testX][testY]) == color:
-                allyList.append((board.m[testX][testY], testX, testY))
-            elif getIntegerSign(board.m[testX][testY]) == -color:
-                ennemyList.append((board.m[testX][testY], testX, testY))
-    #Score for possesion of an undisputable isolated tower
-    if ennemyList.__len__() == 0:
-        if(allyList.__len__() == 0):
-            return color*2 # 100 % Isolated, fully gained point
-    return color #Point for a having more tower than the opponent
-
 #Reduce the number of one of the opponent
 def towerScoreStart(player, board, posX, posY):
     #Init
@@ -116,23 +94,6 @@ def towerScoreStart(player, board, posX, posY):
         return color*2 #Two points for ones
     return color #Point for a having more tower than the opponent
 
-#Make it very good to have isolated tower of small value !
-def calculate_score_end_game(player, board):
-    score = 0.0
-    #Score for possession of undisputable tower
-    for i in range(board.rows):
-        for j in range(board.columns):
-            #Empty position don't count in the score
-            if board.m[i][j] == 0:
-                pass
-            #Score for possession of undisputable max level tower
-            elif abs(board.m[i][j]) == board.max_height:
-                score += getIntegerSign(board.m[i][j])*3 # 5 stage tower
-            #Calculate score of a tower depending on it's neighbor
-            else:
-                score += towerScoreEnd(player, board, i, j)
-    return score
-
 def calculate_score_start_game(player, board):
     score = 0.0
     #Score for possession of undisputable tower
@@ -143,7 +104,7 @@ def calculate_score_start_game(player, board):
                 pass
             #Score for possession of undisputable max level tower
             elif abs(board.m[i][j]) == board.max_height:
-                score += getIntegerSign(board.m[i][j])*5 # 5 stage tower
+                score += getIntegerSign(board.m[i][j])*6 # 5 stage tower
             #Calculate score of a tower depending on it's neighbor
             else:
                 score += towerScoreStart(player, board, i, j)
@@ -206,7 +167,6 @@ class Agent:
         newBoard = avalamImproved.Board(board.get_percepts(player==avalamImproved.PLAYER2))
         state = (newBoard, player, step)
         return minimaxImproved.search(state, self)
-
 
 if __name__ == "__main__":
     avalamImproved.agent_main(Agent())
