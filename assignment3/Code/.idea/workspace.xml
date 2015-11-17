@@ -46,8 +46,8 @@
       <file leaf-file-name="contest_agent.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/contest_agent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.87091756">
-              <caret line="59" column="17" selection-start-line="59" selection-start-column="17" selection-end-line="59" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.12752722">
+              <caret line="186" column="24" selection-start-line="186" selection-start-column="24" selection-end-line="186" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -129,8 +129,8 @@
         <option value="$PROJECT_DIR$/game.py" />
         <option value="$PROJECT_DIR$/avalamFinal.py" />
         <option value="$PROJECT_DIR$/minimaxFinal.py" />
-        <option value="$PROJECT_DIR$/contest_agent.py" />
         <option value="$PROJECT_DIR$/THE_NICO_GUSBIN_DESTROYER.py" />
+        <option value="$PROJECT_DIR$/contest_agent.py" />
       </list>
     </option>
   </component>
@@ -780,8 +780,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/contest_agent.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.87091756">
-          <caret line="59" column="17" selection-start-line="59" selection-start-column="17" selection-end-line="59" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.12752722">
+          <caret line="186" column="24" selection-start-line="186" selection-start-column="24" selection-end-line="186" selection-end-column="24" />
           <folding />
         </state>
       </provider>

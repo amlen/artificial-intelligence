@@ -43,30 +43,10 @@ def getIntegerSign(int):
         return -1
     return 0
 
-def calculate_maxMinMaxDepth(steps, time_left):
+def calculate_maxMinMaxDepth(steps, time_left, depth_safety):
     if(time_left == None):
         return 2
-    if time_left < 100:
-        return 2
-    if time_left < 150 and steps > 20:
-        return 3
-    if time_left < 150:
-        return 2
-    if time_left < 300 and steps > 25:
-        return 4
-    if time_left < 300:
-        return 3
-    if steps > 30:
-        return 50
-    if time_left > 600 and steps > 19:
-        return 5
-    if time_left > 900 and steps > 14:
-        return 4
-    if steps > 19:
-        return 4
-    if steps > 7:
-        return 3
-    return 2
+
 
 #Pre the two tower are adjacent
 def couldTowerXJumpOverTowerY(X, Y):
@@ -223,7 +203,7 @@ class Agent:
         #Launch
         newBoard = avalamFinal.Board(board.get_percepts(player==avalamFinal.PLAYER2))
         state = (newBoard, player, step)
-        self.maxMinMaxDepth = max(calculate_maxMinMaxDepth(step, time_left), newBoard.estimate_depth_safety() + 1)
+        self.maxMinMaxDepth = calculate_maxMinMaxDepth(step, time_left, newBoard.estimate_depth_safety())
         #Debug
         print("Depth :", self.maxMinMaxDepth)
         print("Time left : ", time_left)
