@@ -112,18 +112,27 @@ def towerScore(board, posX, posY):
     color = getIntegerSign(tower)
     allyList = []
     ennemyList = []
+    superAllyCounter = 0
+    superEnnemyCounter = 0
     #Init ally and ennemy List
     for dir in directions:
         testX = posX + dir[0]
         testY = posY + dir[1]
         if board.inBounds(testX, testY) and couldTowerXJumpOverTowerY(board.m[testX][testY], tower):
             if getIntegerSign(board.m[testX][testY]) == color:
+                if abs(tower) + abs(board.m[testX][testY]) == 5:
+                    superAllyCounter += 1
                 allyList.append((board.m[testX][testY], testX, testY))
             elif getIntegerSign(board.m[testX][testY]) == -color:
+                if abs(tower) + abs(board.m[testX][testY]) == 5:
+                    superEnnemyCounter += 1
                 ennemyList.append((board.m[testX][testY], testX, testY))
     #Score for possesion of an undisputable isolated tower
     if ennemyList.__len__() == 0 and allyList.__len__() == 0:
-        return color*5 # 100 % Isolated, fully gained point
+        return color*10 # 100 % Isolated, fully gained point
+    #Check for point definitly made
+    if superEnnemyCounter == 0 and superAllyCounter > 0:
+        return color*8
     #Check for snapback on tower
     if not (abs(tower) == 3 or abs(tower) == 4) or allyList.__len__() == 0 : #Else tower of level three would too easily be in snapback
         snapback = True
@@ -137,13 +146,13 @@ def towerScore(board, posX, posY):
                     snapback = False
                     break
         if snapback:
-            return -color*1 # 1 points for a snapback (other tower in snapback give points too so carefull with that)
+            return -color # 1 points for a snapback (other tower in snapback give points too so carefull with that)
     # Nothing weird about these towers, juste give normal points
     if abs(tower) == 1:
-        return color*2 #Two points for ones, because ones are possibilities
+        return color*3 #Two points for ones, because ones are possibilities
     if abs(tower) == 2:
-        return color*1.5 #1.5 points for twos, because twos are also possibilities
-    return color #Point for a having more tower than the opponent
+        return color*2 #1.5 points for twos, because twos are also possibilities
+    return -color*2 #Point for a having more tower than the opponent
 
 # Calculate board score
 def calculate_score(board):
@@ -155,7 +164,7 @@ def calculate_score(board):
                 pass
             #Score for possession of undisputable max level tower
             elif abs(board.m[i][j]) == board.max_height:
-                score += getIntegerSign(board.m[i][j])*6 # 5 stage tower
+                score += getIntegerSign(board.m[i][j])*12 # 5 stage tower
             #Calculate score of a tower depending on it's neighbor
             else:
                 score += towerScore(board, i, j)

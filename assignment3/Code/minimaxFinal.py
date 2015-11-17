@@ -95,9 +95,7 @@ def search(state, game, time_left, prune=True):
             popIndex = insertInLexicalOrder(actionList, a)
             v, _ = min_value(s, alpha, beta, depth + 1, actionList)
             actionList.pop(popIndex)
-            if v == val and random.randint(0, 1000) == 0:
-                action = action
-            elif v > val:
+            if v > val:
                 val = v
                 action = a
                 if prune:
@@ -121,9 +119,7 @@ def search(state, game, time_left, prune=True):
             popIndex = insertInLexicalOrder(actionList, a)
             v, _ = max_value(s, alpha, beta, depth + 1, actionList)
             actionList.pop(popIndex)
-            if v == val and random.randint(0, 1000) == 0:
-                action = action
-            elif v < val:
+            if v < val:
                 val = v
                 action = a
                 if prune:
