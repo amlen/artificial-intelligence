@@ -253,7 +253,6 @@ class Board:
 
 
     def estimate_depth_safety(self):
-        crucialActionList = []
         strongActionList = []
         for i in range(self.rows):
             for j in range(self.columns):
@@ -275,19 +274,11 @@ class Board:
                                 elif currentTower + adjTower == 5:
                                     tempStrongActionList.append((i, j, posX, posY))
                                     elemCounter += 1
-                    if elemCounter == 1:
-                        #Nearly isolated => crucial move
-                        crucialActionList.extend(tempStrongActionList)
-                        crucialActionList.extend(tempWeakActionList)
-                    else:
+                    if elemCounter > 1:
                         #Normal move
                         strongActionList.extend(tempStrongActionList)
-        crucialActionList.extend(strongActionList)
         #Debug print
-        print(crucialActionList)
-        res = removeOverlappingActions(crucialActionList)
-        #DebugPrint
-        print(res)
+        res = removeOverlappingActions(strongActionList)
         #return
         return len(res)
 

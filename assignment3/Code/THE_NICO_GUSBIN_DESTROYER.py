@@ -58,8 +58,6 @@ def calculate_maxMinMaxDepth(steps, time_left):
         return 3
     if steps > 30:
         return 50
-    if time_left > 600 and steps > 19:
-        return 5
     if time_left > 900 and steps > 14:
         return 4
     if steps > 19:

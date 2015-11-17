@@ -22,6 +22,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 import avalamFinal
 import minimaxFinal
+import math
 
 ################
 # My Variables #
@@ -30,7 +31,8 @@ import minimaxFinal
 #On board (ligne, collumn)
 #TOPLEFT UP TOPRIGHT LEFT RIGHT DOWNLEFT DOWN DOWNRIGHT
 directions = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
-
+MAX_STEPS = 35
+MAX_STEPS_PLAYED = 18
 ##############
 # My Methods #
 ##############
@@ -43,9 +45,38 @@ def getIntegerSign(int):
         return -1
     return 0
 
-def calculate_maxMinMaxDepth(steps, time_left, depth_safety):
-    if(time_left == None):
+def getStepSafeDepth(steps, time_left):
+    basePossibilities = 300 - (10*(steps))
+    currentNbPossibilties = basePossibilities
+    depthEstimated = 1
+    while currentNbPossibilties < time_left*1000: #10000000:
+        if currentNbPossibilties < 0:
+            return 50
+        currentNbPossibilties *= (basePossibilities - (10*depthEstimated))
+        depthEstimated+=1
+    return depthEstimated-1
+
+def calculate_maxMinMaxDepth(steps, time_left, gametime, depth_safety):
+    #Obvious return
+    if(time_left == None or depth_safety > 0):
         return 2
+    if(time_left < (MAX_STEPS - steps)*2):
+        return 1
+    #Calculate safe depth
+    safeDepth = getStepSafeDepth(steps, time_left)
+    #Evaluate
+    timeSituation= time_left - (gametime / MAX_STEPS_PLAYED)*(MAX_STEPS_PLAYED - math.ceil(steps/2))
+    if timeSituation > 0:
+        #Avance sur le planning
+        if safeDepth == 2 and timeSituation > (MAX_STEPS - steps)*10:
+            return 3
+        if safeDepth == 3 and timeSituation > (MAX_STEPS - steps)*20:
+            return 4
+    else:
+        #Retard
+        return 2
+    return safeDepth
+
 
 
 #Pre the two tower are adjacent
@@ -201,9 +232,14 @@ class Agent:
         will perform.
         """
         #Launch
+        if (step == 1 or step == 2):
+            self.gametime = time_left
+        if (step == 1):
+            # Hard codage de la 1ère action pour éviter une perte de temps
+            return (3, 8, 4, 7)
         newBoard = avalamFinal.Board(board.get_percepts(player==avalamFinal.PLAYER2))
         state = (newBoard, player, step)
-        self.maxMinMaxDepth = calculate_maxMinMaxDepth(step, time_left, newBoard.estimate_depth_safety())
+        self.maxMinMaxDepth = calculate_maxMinMaxDepth(step, time_left, self.gametime, newBoard.estimate_depth_safety())
         #Debug
         print("Depth :", self.maxMinMaxDepth)
         print("Time left : ", time_left)
