@@ -30,7 +30,9 @@ import minimaxFinal
 #On board (ligne, collumn)
 #TOPLEFT UP TOPRIGHT LEFT RIGHT DOWNLEFT DOWN DOWNRIGHT
 directions = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
-
+# MAX_STEPS should be 38 but we hardcoded the first move and the last moves
+# are really fast and we don't decrease time for ennemy steps ( /2 )
+MAX_STEPS = 18
 ##############
 # My Methods #
 ##############
@@ -43,9 +45,12 @@ def getIntegerSign(int):
         return -1
     return 0
 
-def calculate_maxMinMaxDepth(steps, time_left):
+def calculate_maxMinMaxDepth(steps, time_left, depth_safety):
     if(time_left == None):
         return 2
+
+    if time_left / (MAX_STEPS - steps) > self.gametime / MAX_STEPS:
+        pass
     if time_left < 100:
         return 2
     if time_left < 150 and steps > 20:
@@ -221,6 +226,11 @@ class Agent:
         will perform.
         """
         #Launch
+        if (step == 1 or step == 2):
+            self.gametime = time_left
+        if (step == 1):
+            # Hard codage de la 1ère action pour éviter une perte de temps
+            return (3, 8, 4, 7)
         newBoard = avalamFinal.Board(board.get_percepts(player==avalamFinal.PLAYER2))
         state = (newBoard, player, step)
         self.maxMinMaxDepth = max(calculate_maxMinMaxDepth(step, time_left), newBoard.estimate_depth_safety() + 1)
