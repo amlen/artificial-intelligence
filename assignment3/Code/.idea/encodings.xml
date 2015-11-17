@@ -3,7 +3,6 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/agent_rassembleur.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/minimaxFinal.py" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/minimaxHereComesTheDrop.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/minimaxImproved.py" charset="UTF-8" />
   </component>
 </project>

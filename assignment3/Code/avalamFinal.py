@@ -35,9 +35,9 @@ def binnaryInsert(list, action, value, i, j):
     if x == i or j <= i:
         list.insert(i, (action, value))
         return
-    if list[x][1] < value:
+    elif list[x][1] < value:
         binnaryInsert(list, action, value, x, j)
-    if list[x][1] > value:
+    elif list[x][1] > value:
         binnaryInsert(list, action, value, i, x)
     else:
         list.insert(x, (action, value))
@@ -205,49 +205,41 @@ class Board:
         weak3relatedActionList = []
         weak2relatedActionList = []
         weak1relatedActionList = []
-        for i in range(self.rows):
-            for j in range(self.columns):
-                #Empty position don't count in the score
-                currentTower = abs(self.m[i][j])
-                if not (currentTower == 0 or currentTower == self.max_height):
-                    tempStrongActionList = []
-                    tempWeak3relatedActionList = []
-                    tempWeak2relatedActionList = []
-                    tempWeak1relatedActionList = []
-                    elemCounter = 0
-                    for modX, modY in directions:
-                        posX = i + modX
-                        posY = j + modY
-                        if self.inBounds(posX, posY):
-                            adjTower = abs(self.m[posX][posY])
-                            if not (adjTower == 0 or adjTower == self.max_height):
-                                if currentTower + adjTower < 5:
-                                    elemCounter += 1
-                                    if max(currentTower, adjTower) == 3:
-                                        tempWeak3relatedActionList.append((i, j, posX, posY))
-                                    elif max(currentTower, adjTower) == 2:
-                                        tempWeak2relatedActionList.append((i, j, posX, posY))
-                                    elif max(currentTower, adjTower) == 1:
-                                        tempWeak1relatedActionList.append((i, j, posX, posY))
-                                elif currentTower + adjTower == 5:
-                                    tempStrongActionList.append((i, j, posX, posY))
-                                    elemCounter += 1
-                    if elemCounter == 1:
-                        #Nearly isolated => crucial move
-                        crucialActionList.extend(tempStrongActionList)
-                        crucialActionList.extend(tempWeak3relatedActionList)
-                        crucialActionList.extend(tempWeak2relatedActionList)
-                        crucialActionList.extend(tempWeak1relatedActionList)
-                    else:
-                        #Normal move
-                        if getIntegerSign(self.m[i][j]) == player:
-                            tempStrongActionList.extend(strongActionList)
-                            strongActionList = tempStrongActionList
-                        else:
-                            strongActionList.extend(tempStrongActionList)
-                        fuseSortList(weak3relatedActionList, tempWeak3relatedActionList, elemCounter)
-                        fuseSortList(weak2relatedActionList, tempWeak2relatedActionList, elemCounter)
-                        fuseSortList(weak1relatedActionList, tempWeak1relatedActionList, elemCounter)
+        for i, j, h in self.get_towers():
+            elemCounter = 0
+            tempStrongActionList = []
+            tempWeak3relatedActionList = []
+            tempWeak2relatedActionList = []
+            tempWeak1relatedActionList = []
+            for action in self.get_tower_actions(i, j):
+                elemCounter += 1
+                currentTower = abs(h)
+                adjTower = abs(self.m[action[2]][action[3]])
+                if currentTower + adjTower < 5:
+                    if max(currentTower, adjTower) == 3:
+                        tempWeak3relatedActionList.append(action)
+                    elif max(currentTower, adjTower) == 2:
+                        tempWeak2relatedActionList.append(action)
+                    elif max(currentTower, adjTower) == 1:
+                        tempWeak1relatedActionList.append(action)
+                elif currentTower + adjTower == 5:
+                    tempStrongActionList.append(action)
+            if elemCounter == 1:
+                #Nearly isolated => crucial move
+                crucialActionList.extend(tempStrongActionList)
+                crucialActionList.extend(tempWeak3relatedActionList)
+                crucialActionList.extend(tempWeak2relatedActionList)
+                crucialActionList.extend(tempWeak1relatedActionList)
+            else:
+                #Normal move
+                if getIntegerSign(self.m[i][j]) == player:
+                    tempStrongActionList.extend(strongActionList)
+                    strongActionList = tempStrongActionList
+                else:
+                    strongActionList.extend(tempStrongActionList)
+                fuseSortList(weak3relatedActionList, tempWeak3relatedActionList, elemCounter)
+                fuseSortList(weak2relatedActionList, tempWeak2relatedActionList, elemCounter)
+                fuseSortList(weak1relatedActionList, tempWeak1relatedActionList, elemCounter)
         for action in crucialActionList:
             yield action
         for action in strongActionList:

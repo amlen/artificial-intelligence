@@ -218,7 +218,6 @@ class Agent:
         #Debug
         print("Depth :", self.maxMinMaxDepth)
         print("Time left : ", time_left)
-
         return minimaxFinal.search(state, self, time_left)
 
 if __name__ == "__main__":

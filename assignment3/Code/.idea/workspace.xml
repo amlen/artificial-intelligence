@@ -24,9 +24,11 @@
       <file leaf-file-name="game.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.310345">
-              <caret line="308" column="8" selection-start-line="308" selection-start-column="8" selection-end-line="308" selection-end-column="8" />
-              <folding />
+            <state vertical-scroll-proportion="-52.75862">
+              <caret line="435" column="67" selection-start-line="435" selection-start-column="67" selection-end-line="435" selection-end-column="67" />
+              <folding>
+                <element signature="e#745#759#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -34,8 +36,8 @@
       <file leaf-file-name="THE_NICO_GUSBIN_DESTROYER.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/THE_NICO_GUSBIN_DESTROYER.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.45919478">
-              <caret line="61" column="16" selection-start-line="61" selection-start-column="16" selection-end-line="61" selection-end-column="16" />
+            <state vertical-scroll-proportion="0.5505443">
+              <caret line="126" column="32" selection-start-line="126" selection-start-column="32" selection-end-line="126" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -45,7 +47,7 @@
         <entry file="file://$PROJECT_DIR$/agent_terre_brulee_only.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="110" column="16" selection-start-line="110" selection-start-column="16" selection-end-line="110" selection-end-column="16" />
+              <caret line="92" column="23" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -55,7 +57,7 @@
         <entry file="file://$PROJECT_DIR$/avalamFinal.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="292" column="50" selection-start-line="292" selection-start-column="50" selection-end-line="292" selection-end-column="50" />
+              <caret line="243" column="24" selection-start-line="243" selection-start-column="24" selection-end-line="243" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -64,8 +66,8 @@
       <file leaf-file-name="minimaxFinal.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/minimaxFinal.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="9.896552">
-              <caret line="66" column="35" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="81" column="38" selection-start-line="81" selection-start-column="38" selection-end-line="81" selection-end-column="38" />
               <folding>
                 <element signature="e#721#731#0" expanded="true" />
               </folding>
@@ -328,7 +330,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="Code" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/game.py" />
-      <option name="PARAMETERS" value="--time 1200 F:\Cyril\travail\Unif\Master1\IA\Github\artificial-intelligence\assignment3\Code\THE_NICO_GUSBIN_DESTROYER.py F:\Cyril\travail\Unif\Master1\IA\Github\artificial-intelligence\assignment3\Code\THE_NICO_GUSBIN_DESTROYER.py" />
+      <option name="PARAMETERS" value="--time 300 F:\Cyril\travail\Unif\Master1\IA\Github\artificial-intelligence\assignment3\Code\THE_NICO_GUSBIN_DESTROYER.py F:\Cyril\travail\Unif\Master1\IA\Github\artificial-intelligence\assignment3\Code\THE_NICO_GUSBIN_DESTROYER.py" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
@@ -350,8 +352,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17864583" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -359,7 +361,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2914467" sideWeight="0.4875" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2914467" sideWeight="0.4875" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -624,7 +626,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="63" column="16" selection-start-line="63" selection-start-column="16" selection-end-line="63" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -632,7 +633,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.7203482">
           <caret line="49" column="14" selection-start-line="49" selection-start-column="14" selection-end-line="49" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -640,7 +640,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.37105548">
           <caret line="85" column="24" selection-start-line="85" selection-start-column="24" selection-end-line="85" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -648,15 +647,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="63" column="17" selection-start-line="63" selection-start-column="17" selection-end-line="63" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent_simple_working_evaluation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="22" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -664,7 +654,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="90" column="0" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -672,15 +661,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="117" column="0" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent_toujours_collabo_mais_c'est_deja_mieux.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="104" column="8" selection-start-line="104" selection-start-column="8" selection-end-line="104" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -688,7 +668,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="214" column="101" selection-start-line="214" selection-start-column="101" selection-end-line="214" selection-end-column="101" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -696,7 +675,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="101" column="35" selection-start-line="101" selection-start-column="35" selection-end-line="101" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -704,7 +682,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="75" column="0" selection-start-line="75" selection-start-column="0" selection-end-line="100" selection-end-column="15" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -712,15 +689,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="3.6441784">
           <caret line="197" column="34" selection-start-line="197" selection-start-column="34" selection-end-line="197" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent_i_lost_my_branches_to_see_the_future_but_now_i'm_dumb.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.0326594">
-          <caret line="210" column="80" selection-start-line="210" selection-start-column="80" selection-end-line="210" selection-end-column="80" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -728,14 +696,39 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.03577">
           <caret line="28" column="14" selection-start-line="28" selection-start-column="14" selection-end-line="28" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/game.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.310345">
-          <caret line="308" column="8" selection-start-line="308" selection-start-column="8" selection-end-line="308" selection-end-column="8" />
+        <state vertical-scroll-proportion="-52.75862">
+          <caret line="435" column="67" selection-start-line="435" selection-start-column="67" selection-end-line="435" selection-end-column="67" />
+          <folding>
+            <element signature="e#745#759#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent_i_lost_my_branches_to_see_the_future_but_now_i'm_dumb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4976672">
+          <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent_simple_working_evaluation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.4416797">
+          <caret line="10" column="22" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent_toujours_collabo_mais_c'est_deja_mieux.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2.7496111">
+          <caret line="104" column="8" selection-start-line="104" selection-start-column="8" selection-end-line="104" selection-end-column="8" />
           <folding />
         </state>
       </provider>
@@ -743,33 +736,33 @@
     <entry file="file://$PROJECT_DIR$/agent_terre_brulee_only.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="110" column="16" selection-start-line="110" selection-start-column="16" selection-end-line="110" selection-end-column="16" />
+          <caret line="92" column="23" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/minimaxFinal.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="9.896552">
-          <caret line="66" column="35" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
-          <folding>
-            <element signature="e#721#731#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/avalamFinal.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="292" column="50" selection-start-line="292" selection-start-column="50" selection-end-line="292" selection-end-column="50" />
+          <caret line="243" column="24" selection-start-line="243" selection-start-column="24" selection-end-line="243" selection-end-column="24" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/minimaxFinal.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="81" column="38" selection-start-line="81" selection-start-column="38" selection-end-line="81" selection-end-column="38" />
+          <folding>
+            <element signature="e#721#731#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/THE_NICO_GUSBIN_DESTROYER.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.45919478">
-          <caret line="61" column="16" selection-start-line="61" selection-start-column="16" selection-end-line="61" selection-end-column="16" />
+        <state vertical-scroll-proportion="0.5505443">
+          <caret line="126" column="32" selection-start-line="126" selection-start-column="32" selection-end-line="126" selection-end-column="32" />
           <folding />
         </state>
       </provider>
