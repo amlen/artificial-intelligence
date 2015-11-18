@@ -205,6 +205,7 @@ class Board:
         weak3relatedActionList = []
         weak2relatedActionList = []
         weak1relatedActionList = []
+        weakestRelatedActionList = []
         for i, j, h in self.get_towers():
             elemCounter = 0
             tempStrongActionList = []
@@ -230,6 +231,16 @@ class Board:
                 crucialActionList.extend(tempWeak3relatedActionList)
                 crucialActionList.extend(tempWeak2relatedActionList)
                 crucialActionList.extend(tempWeak1relatedActionList)
+            elif elemCounter == 8:
+                #Extra weak move if related to ones
+                if getIntegerSign(self.m[i][j]) == player:
+                    tempStrongActionList.extend(strongActionList)
+                    strongActionList = tempStrongActionList
+                else:
+                    strongActionList.extend(tempStrongActionList)
+                fuseSortList(weak3relatedActionList, tempWeak3relatedActionList, elemCounter)
+                fuseSortList(weak2relatedActionList, tempWeak2relatedActionList, elemCounter)
+                weakestRelatedActionList.extend(tempWeak1relatedActionList)
             else:
                 #Normal move
                 if getIntegerSign(self.m[i][j]) == player:
@@ -250,6 +261,9 @@ class Board:
             yield action[0]
         for action in weak1relatedActionList:
             yield action[0]
+        if len(crucialActionList) == 0 and len(strongActionList) == 0 and len(weak3relatedActionList) == 0 and len(weak2relatedActionList) == 0 and len(weak1relatedActionList) == 0:
+            for action in weakestRelatedActionList:
+                yield action
 
 
     def estimate_depth_safety(self):
@@ -332,7 +346,7 @@ class Board:
                     elif self.m[i][j] == self.max_height:
                         score += 1
         return score
-    
+
     def __str__(self):
         return '' + repr(self.m)
 
@@ -405,6 +419,6 @@ class Agent:
         ArgumentParser and the options dictionary. It can be used to
         configure the agent based on the custom options. (None to
         disable)
-  
+
     """
     pass

@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
+# coding: utf-8
+
 from cgitb import enable
 
 __author__ = 'Cyril'
-#!/usr/bin/env python3
+
 """
 Avalam agent.
 Copyright (C) 2015, <<<<<<<<<<< YOUR NAMES HERE >>>>>>>>>>>
@@ -50,8 +53,15 @@ def getStepSafeDepth(steps, time_left):
     currentNbPossibilties = basePossibilities
     depthEstimated = 1
     while currentNbPossibilties < time_left*1000: #10000000:
-        if currentNbPossibilties < 0:
-            return 50
+        # max 120 000
+        if basePossibilities <= 0 or currentNbPossibilties <= 0 or depthEstimated > 5:
+            return 5
+        if basePossibilities <= 3:
+            return 4
+        if basePossibilities <= 10:
+            return 3
+        # ITER 0 (6375) = 85 * (85 - 10) =
+        # ITER 1 (471750) = 6375 * (85 - 11)
         currentNbPossibilties *= (basePossibilities - (10*depthEstimated))
         depthEstimated+=1
     return depthEstimated-1
@@ -69,9 +79,12 @@ def calculate_maxMinMaxDepth(steps, time_left, gametime, depth_safety):
     if timeSituation > 0:
         #Avance sur le planning
         if safeDepth == 2 and timeSituation > (MAX_STEPS - steps)*10:
-            return 3
+            safeDepth += 1
         if safeDepth == 3 and timeSituation > (MAX_STEPS - steps)*20:
-            return 4
+            safeDepth += 1
+        if safeDepth == 4 and timeSituation > (MAX_STEPS - steps)*30:
+            print('coucou')
+            safeDepth += 1
     else:
         #Retard
         return 2
@@ -140,10 +153,12 @@ def towerScore(board, posX, posY):
                 ennemyList.append((board.m[testX][testY], testX, testY))
     #Score for possesion of an undisputable isolated tower
     if ennemyList.__len__() == 0 and allyList.__len__() == 0:
-        return color*10 # 100 % Isolated, fully gained point
+        return color*5 # 100 % Isolated, fully gained point
     #Check for point definitly made
+    if superEnnemyCounter > 0:
+        return -color*1
     if superEnnemyCounter == 0 and superAllyCounter > 0:
-        return color*8
+        return color*1
     #Check for snapback on tower
     if not (abs(tower) == 3 or abs(tower) == 4) or allyList.__len__() == 0 : #Else tower of level three would too easily be in snapback
         snapback = True
@@ -160,10 +175,11 @@ def towerScore(board, posX, posY):
             return -color # 1 points for a snapback (other tower in snapback give points too so carefull with that)
     # Nothing weird about these towers, juste give normal points
     if abs(tower) == 1:
-        return color*3 #Two points for ones, because ones are possibilities
+        return color*1.5 #Two points for ones, because ones are possibilities
+
     if abs(tower) == 2:
-        return color*2 #1.5 points for twos, because twos are also possibilities
-    return -color*2 #Point for a having more tower than the opponent
+        return color*1.2 #1.5 points for twos, because twos are also possibilities
+    return color #Point for a having more tower than the opponent
 
 # Calculate board score
 def calculate_score(board):
@@ -175,7 +191,7 @@ def calculate_score(board):
                 pass
             #Score for possession of undisputable max level tower
             elif abs(board.m[i][j]) == board.max_height:
-                score += getIntegerSign(board.m[i][j])*12 # 5 stage tower
+                score += getIntegerSign(board.m[i][j])*5.8 # 5 stage tower
             #Calculate score of a tower depending on it's neighbor
             else:
                 score += towerScore(board, i, j)
@@ -235,7 +251,7 @@ class Agent:
         if (step == 1 or step == 2):
             self.gametime = time_left
         if (step == 1):
-            # Hard codage de la 1ère action pour éviter une perte de temps
+            # Hard codage de la 1ï¿½re action pour ï¿½viter une perte de temps
             return (3, 8, 4, 7)
         newBoard = avalamFinal.Board(board.get_percepts(player==avalamFinal.PLAYER2))
         state = (newBoard, player, step)
