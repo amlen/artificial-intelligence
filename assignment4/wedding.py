@@ -57,6 +57,7 @@ class Wedding(Problem):
                 number_participants, number_tables, grid, tables, value)
 
     def successor(self, state):
+
         pass
 
     def value(self, state):
