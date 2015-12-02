@@ -7,7 +7,7 @@
 ##########################################################################
 from search import Problem, LSNode, random_walk
 from copy import deepcopy
-from random import random, randint, seed, choice
+from random import seed, choice
 import sys
 
 #################
@@ -16,6 +16,11 @@ import sys
 
 
 def get_init_state_from_file(filename):
+    '''
+    Constructs the initial state of a Wedding problem.
+    filename must be a valid path to a file
+    return : a State containing every information needed
+    '''
     number_participants = 0
     number_tables = 0
     grid = {}
@@ -52,6 +57,7 @@ def get_init_state_from_file(filename):
             i += 1
     return State(number_participants, number_tables, grid, tables, value)
 
+
 def table_value(table, m):
     '''
     table is a list of people
@@ -62,6 +68,7 @@ def table_value(table, m):
         for e2 in table:
             value += m[e1][e2]
     return value
+
 
 class Wedding(Problem):
 
@@ -84,20 +91,22 @@ class Wedding(Problem):
         table2 = None
         p_ind2 = -1
         t_ind2 = -1
-        new_tables = deepcopy(state.tables)
+        new_tables = list(state.tables)
         # Récupère les gens dans les tables
         for i in range(len(state.tables)):
             if table1 == None:
                 try:
                     p_ind1 = new_tables[i].index(person1)
-                    table1 = new_tables[i]
+                    table1 = state.tables[i]
+                    new_tables[i] = list(table1)
                     t_ind1 = i
                 except ValueError as _:
                     pass
             if table2 == None:
                 try:
                     p_ind2 = new_tables[i].index(person2)
-                    table2 = new_tables[i]
+                    table2 = state.tables[i]
+                    new_tables[i] = list(table2)
                     t_ind2 = i
                 except ValueError as _:
                     pass
@@ -117,17 +126,22 @@ class Wedding(Problem):
         new_value = table_value(
             new_tables[t_ind1], state.m) + table_value(new_tables[t_ind2], state.m)
 
-        #if (self.best_value < state.value - old_value + new_value):
-        #    self.best_value = state.value - old_value + new_value
-        #    print(repr(self.best_value))
-
+        '''
+        if (self.best_value < state.value - old_value + new_value):
+            self.best_value = state.value - old_value + new_value
+            print('---------------------------')
+            print(repr(old_value))
+            print(repr(new_value))
+            print(repr(self.best_value))
+            print('---------------------------')
+        '''
         return State(state.n, state.t, state.m, new_tables, state.value - old_value + new_value)
 
     def successor(self, state):
         swap = {}
         #if self.old_tables == state.tables:
-            #print('wtf')
-        self.old_tables = state.tables
+        #    print('wtf')
+        #self.old_tables = state.tables
         for table in state.tables:
             for e1 in table:
                 for table2 in state.tables:
@@ -141,10 +155,7 @@ class Wedding(Problem):
     def value(self, state):
         res = 0
         for table in state.tables:
-            for e1 in table:
-                for e2 in table:
-                    if e1 != e2:
-                        res += state.m[e1][e2]
+            res += table_value(table, state.m)
         return res
 ###############
 # State class #
@@ -185,69 +196,63 @@ class State:
         return res
 
     def __lt__(self, other):
-        res = False
         self_concat = []
         other_concat = []
         for i in range(len(self.tables)):
             self_concat += self.tables[i]
             other_concat += other.tables[i]
-        if self_concat >= other_concat:
-            return False
+            if self_concat >= other_concat:
+                return False
         return True
 
     def __le__(self, other):
-        res = False
         self_concat = []
         other_concat = []
         for i in range(len(self.tables)):
             self_concat += self.tables[i]
             other_concat += other.tables[i]
-        if self_concat > other_concat:
-            return False
+            if self_concat > other_concat:
+                return False
         return True
 
     def __eq__(self, other):
-        res = False
         self_concat = []
         other_concat = []
         for i in range(len(self.tables)):
             self_concat += self.tables[i]
             other_concat += other.tables[i]
-        if self_concat != other_concat:
-            return False
+            if self_concat != other_concat:
+                return False
         return True
 
     def __ne__(self, other):
-        res = False
         self_concat = []
         other_concat = []
         for i in range(len(self.tables)):
             self_concat += self.tables[i]
             other_concat += other.tables[i]
-        if self_concat == other_concat:
-            return False
+            if self_concat == other_concat:
+                return False
         return True
 
     def __gt__(self, other):
-        res = False
         self_concat = []
         other_concat = []
         for i in range(len(self.tables)):
             self_concat += self.tables[i]
             other_concat += other.tables[i]
-        if self_concat <= other_concat:
-            return False
+            if self_concat <= other_concat:
+                return False
         return True
 
     def __ge__(self, other):
-        res = False
         self_concat = []
         other_concat = []
         for i in range(len(self.tables)):
             self_concat += self.tables[i]
             other_concat += other.tables[i]
-        if self_concat < other_concat:
-            return False
+            if self_concat < other_concat:
+                return False
         return True
 
 ################
@@ -257,11 +262,10 @@ class State:
 
 def randomized_maxvalue(problem, limit=100, callback=None):
     current = LSNode(problem, problem.initial, 0)
-    best = current
     seed(42)
     list_of_best = []
     list_of_best_values = []
-    for step in range(limit):
+    for _ in range(limit):
         list_of_best = []
         list_of_best_values = []
         if callback is not None:
@@ -269,8 +273,8 @@ def randomized_maxvalue(problem, limit=100, callback=None):
         for elem in list(current.expand()):
             if len(list_of_best) < 5:
                 list_of_best.append(elem)
-                list_of_best_values.append(elem.value())
-            elif elem.value() > min(list_of_best_values):
+                list_of_best_values.append(elem.state.value)
+            elif elem.state.value >= min(list_of_best_values):
                 m = min(list_of_best_values)
                 ind = list_of_best_values.index(m)
                 # Remove the worst state by concat
@@ -278,22 +282,28 @@ def randomized_maxvalue(problem, limit=100, callback=None):
                     worst_node = list_of_best[ind]
                     for r in range(len(list_of_best_values)):
                         if list_of_best_values[r] == m:
-                            if list_of_best[r].state < worst_node.state:
+                            if list_of_best[r].state >= worst_node.state:
                                 worst_node = list_of_best[r]
                                 ind = r
                 list_of_best[ind] = elem
-                list_of_best_values[ind] = elem.value()
+                list_of_best_values[ind] = elem.state.value
         current = choice(list_of_best)
+
+    for node in list_of_best:
+        print(node.state)
+
     m = max(list_of_best_values)
     ind = list_of_best_values.index(m)
     best_node = list_of_best[ind]
     if list_of_best_values.count(m) > 1:
         for r in range(len(list_of_best_values)):
             if list_of_best_values == m:
-                if best_node < list_of_best[r] :
+                if best_node.state < list_of_best[r].state:
                     best_node = list_of_best[r]
-
     return best_node
+    '''
+    return choice(list_of_best)
+    '''
 
 
 def maxvalue(problem, limit=100, callback=None):
@@ -304,26 +314,28 @@ def maxvalue(problem, limit=100, callback=None):
     """
     current = LSNode(problem, problem.initial, 0)
     best = current
-    for step in range(limit):
-        best._value = 0
+    for _ in range(limit):
+        best.v = 0
         if callback is not None:
             callback(current)
         for elem in list(current.expand()):
-            if elem.value() > best.value():
+            if elem.state.value > best.v:
                 best = elem
-            elif elem.value() == best.value():
+                best.v = elem.state.value
+            elif elem.state.value == best.v:
                 if best.state >= elem.state:
                     best = elem
+                    best.v = elem.state.value
         current = best
-    return best
+    return current
 
 if __name__ == '__main__':
     wedding = Wedding(sys.argv[1])
     print(wedding.initial)
 
-    # node = randomized_maxvalue(wedding, 100)
-    node = maxvalue(wedding, 100)
+    node = randomized_maxvalue(wedding, 100)
+    # node = maxvalue(wedding, 100)
     # node = random_walk(wedding, limit=30)
 
-    state = node.state
-    print(state)
+    s = node.state
+    print(s)
