@@ -168,12 +168,12 @@ class State:
         self.value = value
 
     def __str__(self):
-        res = repr(self.value) + "\n"
+        res = repr(self.value)
         for table in self.tables:
+            res += "\n"
             for e in table:
                 res += repr(e) + " "
             res = res.strip()
-            res += "\n"
         return res
 
     def __repr__(self):
