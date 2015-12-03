@@ -153,10 +153,7 @@ class Wedding(Problem):
                                 yield (0, self.switch_people(e1, e2, state))
 
     def value(self, state):
-        res = 0
-        for table in state.tables:
-            res += table_value(table, state.m)
-        return res
+        return state.value
 ###############
 # State class #
 ###############
@@ -195,111 +192,45 @@ class State:
             res += "\n"
         return res
 
-    def __lt__(self, other):
-        self_concat = []
-        other_concat = []
-        for i in range(len(self.tables)):
-            self_concat += self.tables[i]
-            other_concat += other.tables[i]
-            if self_concat >= other_concat:
-                return False
-        return True
-
-    def __le__(self, other):
-        self_concat = []
-        other_concat = []
-        for i in range(len(self.tables)):
-            self_concat += self.tables[i]
-            other_concat += other.tables[i]
-            if self_concat > other_concat:
-                return False
-        return True
-
-    def __eq__(self, other):
-        self_concat = []
-        other_concat = []
-        for i in range(len(self.tables)):
-            self_concat += self.tables[i]
-            other_concat += other.tables[i]
-            if self_concat != other_concat:
-                return False
-        return True
-
-    def __ne__(self, other):
-        self_concat = []
-        other_concat = []
-        for i in range(len(self.tables)):
-            self_concat += self.tables[i]
-            other_concat += other.tables[i]
-            if self_concat == other_concat:
-                return False
-        return True
-
     def __gt__(self, other):
-        self_concat = []
-        other_concat = []
-        for i in range(len(self.tables)):
-            self_concat += self.tables[i]
-            other_concat += other.tables[i]
-            if self_concat <= other_concat:
-                return False
-        return True
-
-    def __ge__(self, other):
-        self_concat = []
-        other_concat = []
-        for i in range(len(self.tables)):
-            self_concat += self.tables[i]
-            other_concat += other.tables[i]
-            if self_concat < other_concat:
-                return False
-        return True
+        diff_value = self.value - other.value
+        if diff_value == 0:
+            self_concat = []
+            other_concat = []
+            for i in range(len(self.tables)):
+                self_concat += self.tables[i]
+                other_concat += other.tables[i]
+            #    if self_concat < other_concat:
+            #        return False
+            #return True
+            return self_concat < other_concat
+        else:
+            return self.value > other.value
 
 ################
 # Local Search #
 ################
 
-def lowest_node_state_ind(list_nodes):
-    cur = list_nodes[0]
-    for node in list_nodes[1:]:
-        if node.state >= cur.state:
-            cur = node
-    return list_nodes.index(cur)
 
 def randomized_maxvalue(problem, limit=100, callback=None):
-    #seed(42)
+    seed(42)
     current = LSNode(problem, problem.initial, 0)
-    best_value = 0
+    best = current
     for _ in range(limit):
-        list_of_best_nodes = []
-        list_of_best_values = []
         if callback is not None:
             callback(current)
-        for elem in list(current.expand()):
-            if elem.state.value > best_value:
-                best_value = elem.state.value
-            if len(list_of_best_nodes) < 5:
-                list_of_best_nodes.append(elem)
-                list_of_best_values.append(elem.state.value)
-            elif elem.state.value >= min(list_of_best_values):
-                m = min(list_of_best_values)
-                ind = -1
-                if list_of_best_values.count(m) > 1:
-                    lowest_nodes = []
-                    for r in range(len(list_of_best_values)):
-                        if list_of_best_values[r] == m:
-                        #    if list_of_best_nodes[r].state >= elem.state:
-                        #        ind = r
-                        #        break
-                            lowest_nodes.append(list_of_best_nodes[r])
-                    ind = lowest_node_state_ind(lowest_nodes)
-                else:
-                    ind = list_of_best_values.index(m)
-                list_of_best_nodes[ind] = elem
-                list_of_best_values[ind] = elem.state.value
-        current = choice(list_of_best_nodes)
-    print(repr(best_value))
-    return current
+        successors = list(current.expand())
+        list_of_best = []
+        i = 0
+        while (i < 5):
+            ind = successors.index(max(successors, key=lambda node: node.state))
+            list_of_best.append(successors[ind])
+            successors.pop(ind)
+            i += 1
+        current = choice(list_of_best)
+        if current.state > best.state:
+            best = current
+    return best
 
 
 def maxvalue(problem, limit=100, callback=None):
@@ -309,27 +240,17 @@ def maxvalue(problem, limit=100, callback=None):
     called at each step with the current node.
     """
     current = LSNode(problem, problem.initial, 0)
-    best = current
     best_of_best = current
     #best.v = current.state.value
     for _ in range(limit):
-        best.v = -float('inf')
+        #best.v = -float('inf')
         if callback is not None:
             callback(current)
-        for elem in list(current.expand()):
-            if elem.state.value > best.v:
-                best = elem
-                best.v = elem.state.value
-            elif elem.state.value == best.v:
-                if best.state >= elem.state:
-                    best = elem
-                    best.v = elem.state.value
-        current = best
-        if best.state.value > best_of_best.state.value:
-            best_of_best = best
-        elif best.state.value == best_of_best.state.value:
-            if best_of_best.state >= best.state:
-                best_of_best = best
+        successors = list(current.expand())
+        ind = successors.index(max(successors, key=lambda node: node.state))
+        current = successors[ind]
+        if current.state > best_of_best.state:
+            best_of_best = current
     #return current
     return best_of_best
 
