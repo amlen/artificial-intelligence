@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+# coding: utf-8
 import rpg
+
 
 def get_clauses(merchant, level):
     # Append all clauses needed to find the correct equipment in the 'clauses' list.
@@ -17,6 +19,23 @@ def get_clauses(merchant, level):
     #
     # clauses.append(tuple(equ.index for equ in merchant.equipments))
     clauses = []
+    inventaire = []
+    # Pour toute habilité
+    for ability_needed_name in level.ability_names:
+        ability_equips = []
+        for equip in merchant.equipments:
+            # Pour tout item achetable
+            if merchant.abi_map[ability_needed_name] in equip.provides:
+                # if item provides l'ability
+                ability_equips.append(equip)
+                # if item ne fait pas encore partie de l'equipement
+                if equip not in inventaire:
+                    inventaire.append(equip)
+                    # Insertion des conflits
+                    clauses.append(
+                        tuple([-equip.index, -equip.conflicts.index]))
+        # disjonction des items necessaires à satisfaire une habilité
+        clauses.append(tuple(e.index for e in ability_equips))
     return clauses
 
 
@@ -26,5 +45,20 @@ def get_nb_vars(merchant, level):
     # For example, if your clauses contain all the equipments proposed by merchant and
     # all the abilities provided by these equipment, you would have:
     # nb_vars = len(merchant.abilities) + len(merchant.equipments)
-    nb_vars = 0
+    inventaire = []
+    # Pour toute habilité
+    for ability_needed_name in level.ability_names:
+        ability_equips = []
+        for equip in merchant.equipments:
+            # Pour tout item achetable
+            if merchant.abi_map[ability_needed_name] in equip.provides:
+                # if item provides l'ability
+                ability_equips.append(equip)
+                # if item ne fait pas encore partie de l'equipement
+                if equip not in inventaire:
+                    inventaire.append(equip)
+                    # Insertion des conflits
+        # disjonction des items necessaires à satisfaire une habilité
+    nb_vars = len(set(inventaire))
+    print(repr(nb_vars))
     return nb_vars

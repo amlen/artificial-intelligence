@@ -1,0 +1,35 @@
+Equipment : Lightning Pharis's Hat
+Abilities : Illusionary Dexterity, External Wings
+Conflicts : Black Knight Shield
+
+Equipment : Air Elite Cleric Leggings
+Abilities : Impressive Necromancy, Fast Kick
+Conflicts : Fire Darksword
+
+Enemy : Zombie
+Requirements : Eternal Wings, Fast Kick
+
+=============================================================
+
+Provides(Equipment, Ability) => -Equipment v Ability
+IsProvided(Ability, Equipement) => -Equipement v Ability
+Conflicts(Equipement1, Equipement2) => -Equipement1 v -Equipement2
+Requires(Enemy, Ability) => -Enemy v Ability
+
+Provides("Lightning Pharis's Hat", "Illusionary Dexterity")
+Provides("Lightning Pharis's Hat", "External Wings")
+Provides("Air Elite Cleric Leggings", "Impressive Necromancy")
+Provides("Air Elite Cleric Leggings", "Fast Kick")
+
+IsProvided("Illusionary Dexterity", "Lightning Pharis's Hat")
+IsProvided("External Wings", "Lightning Pharis's Hat")
+IsProvided("Impressive Necromancy", "Air Elite Cleric Leggings")
+IsProvided("Fast Kick", "Air Elite Cleric Leggings")
+
+Conflicts("Lightning Pharis's Hat", "Black Knight Shield")
+Conflicts("Air Elite Cleric Leggings", "Fire Darksword")
+
+Requires("Zombie", "Eternal Wings")
+Requires("Zombie", "Fast Kick")
+
+Zombie

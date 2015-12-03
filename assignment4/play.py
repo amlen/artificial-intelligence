@@ -74,8 +74,8 @@ if __name__ == "__main__":
             print(abi)
 
     if violated_conflicts:
-        print("VIOLATED CONFLICTS: " + str(len(conflicts)))
-        for conf in conflicts:
+        print("VIOLATED CONFLICTS: " + str(len(violated_conflicts)))
+        for conf in violated_conflicts:
             print(str(conf))
 
     if not (missing_abilities or violated_conflicts):

@@ -211,7 +211,7 @@ class LSNode:
     def __repr__(self):
         return "<Node %s>" % (self.state,)
 
-    def value(self):
+    def value(self, state=None):
         """Returns the value of the state contained in this node."""
         if self._value is None:
             self._value = self.problem.value(self.state)
