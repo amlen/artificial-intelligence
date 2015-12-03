@@ -259,51 +259,47 @@ class State:
 # Local Search #
 ################
 
+def lowest_node_state_ind(list_nodes):
+    cur = list_nodes[0]
+    for node in list_nodes[1:]:
+        if node.state >= cur.state:
+            cur = node
+    return list_nodes.index(cur)
 
 def randomized_maxvalue(problem, limit=100, callback=None):
+    #seed(42)
     current = LSNode(problem, problem.initial, 0)
-    seed(42)
-    list_of_best = []
-    list_of_best_values = []
+    best_value = 0
     for _ in range(limit):
-        list_of_best = []
+        list_of_best_nodes = []
         list_of_best_values = []
         if callback is not None:
             callback(current)
         for elem in list(current.expand()):
-            if len(list_of_best) < 5:
-                list_of_best.append(elem)
+            if elem.state.value > best_value:
+                best_value = elem.state.value
+            if len(list_of_best_nodes) < 5:
+                list_of_best_nodes.append(elem)
                 list_of_best_values.append(elem.state.value)
             elif elem.state.value >= min(list_of_best_values):
                 m = min(list_of_best_values)
-                ind = list_of_best_values.index(m)
-                # Remove the worst state by concat
+                ind = -1
                 if list_of_best_values.count(m) > 1:
-                    worst_node = list_of_best[ind]
+                    lowest_nodes = []
                     for r in range(len(list_of_best_values)):
                         if list_of_best_values[r] == m:
-                            if list_of_best[r].state >= worst_node.state:
-                                worst_node = list_of_best[r]
-                                ind = r
-                list_of_best[ind] = elem
+                        #    if list_of_best_nodes[r].state >= elem.state:
+                        #        ind = r
+                        #        break
+                            lowest_nodes.append(list_of_best_nodes[r])
+                    ind = lowest_node_state_ind(lowest_nodes)
+                else:
+                    ind = list_of_best_values.index(m)
+                list_of_best_nodes[ind] = elem
                 list_of_best_values[ind] = elem.state.value
-        current = choice(list_of_best)
-
-    for node in list_of_best:
-        print(node.state)
-
-    m = max(list_of_best_values)
-    ind = list_of_best_values.index(m)
-    best_node = list_of_best[ind]
-    if list_of_best_values.count(m) > 1:
-        for r in range(len(list_of_best_values)):
-            if list_of_best_values == m:
-                if best_node.state < list_of_best[r].state:
-                    best_node = list_of_best[r]
-    return best_node
-    '''
-    return choice(list_of_best)
-    '''
+        current = choice(list_of_best_nodes)
+    print(repr(best_value))
+    return current
 
 
 def maxvalue(problem, limit=100, callback=None):
@@ -314,8 +310,10 @@ def maxvalue(problem, limit=100, callback=None):
     """
     current = LSNode(problem, problem.initial, 0)
     best = current
+    best_of_best = current
+    #best.v = current.state.value
     for _ in range(limit):
-        best.v = 0
+        best.v = -float('inf')
         if callback is not None:
             callback(current)
         for elem in list(current.expand()):
@@ -327,7 +325,13 @@ def maxvalue(problem, limit=100, callback=None):
                     best = elem
                     best.v = elem.state.value
         current = best
-    return current
+        if best.state.value > best_of_best.state.value:
+            best_of_best = best
+        elif best.state.value == best_of_best.state.value:
+            if best_of_best.state >= best.state:
+                best_of_best = best
+    #return current
+    return best_of_best
 
 if __name__ == '__main__':
     wedding = Wedding(sys.argv[1])
