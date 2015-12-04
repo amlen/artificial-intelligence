@@ -7,7 +7,7 @@ __author__ = 'Cyril'
 
 """
 Avalam agent.
-Copyright (C) 2015, <<<<<<<<<<< YOUR NAMES HERE >>>>>>>>>>>
+Copyright (C) 2015, Cyril de Vogelaere, Florian Thuin
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,8 +23,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 """
 
-import avalamFinal
-import minimaxFinal
+import avalam
+import minimax
 import datetime
 import time
 import math
@@ -54,9 +54,9 @@ def getStepSafeDepth(steps, time_left):
     basePossibilities = 300 - (10*(steps))
     currentNbPossibilties = basePossibilities
     depthEstimated = 1
-    while currentNbPossibilties < time_left*10000: #10000000:
-        if basePossibilities <= 0 or currentNbPossibilties <= 0 or depthEstimated > 4:
-            return 4
+    while currentNbPossibilties < time_left*1000*steps: #10000000:
+        if basePossibilities <= 0 or currentNbPossibilties <= 0 or depthEstimated > 5:
+            return 5
         currentNbPossibilties *= (basePossibilities - (10*depthEstimated))
         depthEstimated+=1
     return depthEstimated
@@ -76,11 +76,11 @@ def calculate_maxMinMaxDepth(steps, time_left, gametime, depth_safety):
     timeSituation= getTimeSituation(steps, time_left, gametime)
     if timeSituation > 0:
         #Avance sur le planning
-        if safeDepth == 2 and timeSituation > (MAX_STEPS - steps)*10:
+        if safeDepth == 2 and timeSituation > (MAX_STEPS - steps)*5:
             safeDepth += 1
-        if safeDepth == 3 and timeSituation > (MAX_STEPS - steps)*20:
+        if safeDepth == 3 and timeSituation > (MAX_STEPS - steps)*10:
             safeDepth += 1
-        if safeDepth == 4 and timeSituation > (MAX_STEPS - steps)*30:
+        if safeDepth == 4 and timeSituation > (MAX_STEPS - steps)*15:
             safeDepth += 1
     else:
         #Retard
@@ -144,7 +144,7 @@ def towerScore(board, posX, posY):
                 ennemyList.append((board.m[testX][testY], testX, testY))
     #Score for possesion of an undisputable isolated tower
     if ennemyList.__len__() == 0 and allyList.__len__() == 0:
-        return color*6 # 100 % Isolated, fully gained point
+        return color*7 # 100 % Isolated, fully gained point
     #Check for snapback on tower
     if not (abs(tower) == 3 or abs(tower) == 4) or allyList.__len__() == 0 : #Else tower of level three would too easily be in snapback
         snapback = True
@@ -176,7 +176,7 @@ def calculate_score(board):
                 pass
             #Score for possession of undisputable max level tower
             elif abs(board.m[i][j]) == board.max_height:
-                score += getIntegerSign(board.m[i][j])*6.5 # 5 stage tower
+                score += getIntegerSign(board.m[i][j])*8 # 5 stage tower
             #Calculate score of a tower depending on it's neighbor
             else:
                 score += towerScore(board, i, j)
@@ -243,7 +243,7 @@ class Agent:
             # Hard codage de la 1ï¿½re action pour ï¿½viter une perte de temps
             return (3, 8, 4, 7)
         #Init minmax
-        newBoard = avalamFinal.Board(board.get_percepts(player==avalamFinal.PLAYER2))
+        newBoard = avalam.Board(board.get_percepts(player==avalam.PLAYER2))
         state = (newBoard, player, step)
         self.maxMinMaxDepth = calculate_maxMinMaxDepth(step, time_left, self.gametime, newBoard.estimate_depth_safety())
         self.maxTimeForMinMax = datetime.datetime.now() + datetime.timedelta(0, getTimeSituation(step, time_left, self.gametime))
@@ -252,12 +252,12 @@ class Agent:
         print("Time :", getTimeSituation(step, time_left, self.gametime))
         print("Time left : ", time_left)
         #Minmax
-        minmaxRes = minimaxFinal.search(state, self, time_left)
+        minmaxRes = minimax.search(state, self, time_left)
         print(minmaxRes)
         if minmaxRes == None:
             self.maxMinMaxDepth = 2
-            minmaxRes = minimaxFinal.search(state, self, time_left)
+            minmaxRes = minimax.search(state, self, time_left)
         return minmaxRes
 
 if __name__ == "__main__":
-    avalamFinal.agent_main(Agent())
+    avalam.agent_main(Agent())
