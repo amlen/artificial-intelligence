@@ -1,7 +1,13 @@
 % Local search
 \section{The Wedding Problem}
 \begin{enumerate}
-    \item Compare the 2 strategies implemented in the previous question between each other and with randomwalk, defined in search.py on the given wedding instances. Report in a table, the computation time, the value of the best solution and the number of steps when the best result was reached. For the second and third strategies, each instance should be tested 10 times to eliminate effects of the randomness on the result. When multiple run of the same instance are executed, report the means of the quantities.
+    \item Compare the 2 strategies implemented in the previous question between
+    each other and with randomwalk, defined in search.py on the given wedding
+    instances. Report in a table, the computation time, the value of the best
+    solution and the number of steps when the best result was reached. For the
+    second and third strategies, each instance should be tested 10 times to
+    eliminate effects of the randomness on the result. When multiple run of the
+    same instance are executed, report the means of the quantities.
     \begin{framed}
     	\begin{tabular}{l|l|l|l}
     					& maxvalue 		& randomized maxvalue	& randomwalk\\
@@ -29,26 +35,70 @@
     			\end{framed}
     		\item Why do you think the best strategy beats the other ones ?
     			\begin{framed}
-    				Because it offers a good trade-off between diversification and intensification. It always try to proceed toward a better solution but not always through the same way and as such tend to fall less inside local optimum than maxvalue. It is also obviously better than randomwalk as randomwalk doesn't even try to reach a better solution, although thanks to that it will never fall in a local optimum.
+    				Because it offers a good trade-off between diversification
+                    and intensification. It always try to proceed toward a
+                    better solution but not always through the same way and
+                    as such tend to fall less inside local optimum than
+                    maxvalue. It is also obviously better than randomwalk as
+                    randomwalk doesn't even try to reach a better solution,
+                    although thanks to that it will never fall in a local
+                    optimum.
     			\end{framed}
-    		\item What are the limitations of each strategy in terms of diversification and intensification ?
+    		\item What are the limitations of each strategy in terms of
+            diversification and intensification ?
     			\begin{framed}
-    				\textbf{maxvalue} is the best in terms of intensification but worst in terms of diversification, as such it tend to find a good solution rather fast but fail at improving it after a while as it has only a single chance to exit a local optimum. \newline \newline
-    				\textbf{randomwalk} is focused on diversification while forgoing any trace of intensification, this result in never falling in local optimum at the cost of never really working toward a better solution. If a better solution is found, it was by luck only.\newline \newline
-    				\textbf{randomized maxvalue} offer a good trade of between the two, it always tries to work toward a better solution unlike randomwalk but also has opportunities to avoid falling into local optimum thanks to it's slight diversification. However some local optimum will still be able to trap it as it never consider that two 'bad' swap of guest could lead to a better solution. It is thus also limited although less than the other.
+                    \begin{description}
+                        \item[maxvalue] is the best in terms of intensification
+                        but worst in terms of diversification, as such it tend to
+                        find a good solution rather fast but fail at improving it
+                        after a while as it has only a single chance to exit a
+                        local optimum. \newline \newline
+                        \item[randomwalk] is focused on diversification while
+                        avoiding intensification, this result in never falling in
+                        local optimum at the cost of never really working toward
+                        a better solution. If a better solution is found, it was
+                        by luck only.\newline \newline
+                        \item[randomized maxvalue] offer a good trade of between
+                        the two, it always tries to work toward a better solution
+                        unlike randomwalk but also has opportunities to avoid
+                        falling into local optimum thanks to it's slight
+                        diversification. However some local optimum will still
+                        be able to trap it as it never consider that two
+                        \enquote{bad} swap of guest could lead to a better solution.
+                        It is thus also limited although less than the other.
+                    \end{description}
     			\end{framed}
-    		\item What is the behaviour of the different techniques when they fall in a local optimum.
+    		\item What is the behaviour of the different techniques when they
+            fall in a local optimum.
     			\begin{framed}
-    				\textbf{maxvalue} will try the move leading to the best solution in lexicographic order although it remains degrading comparing to the current best reached. If that solution can lead to a better solution than the best solution found yet will escape the local minimum but it will fall back in otherwise and never be able to leave.\newline \newline
-    				\textbf{randomwalk} never really 'falls' in a local optimum as it never really tries to find them in the first place. If it stumble upon one it will just casually leave it unless it is really unlucky and keep going back in (which is unlikely but remains possible)\newline \newline
-    				\textbf{randomized maxvalue} will have a choice of five moves to try to exit the local optimum, if one of the moves can lead to a better solution it will thus escape and otherwise it will forever fall back and try to find a way to exit.
+                    \begin{description}
+    				\item[maxvalue] will try the move leading to the best
+                    solution in lexicographic order although it remains
+                    degrading comparing to the current best reached. If that
+                    solution can lead to a better solution than the best
+                    solution found yet will escape the local minimum but it
+                    will fall back in otherwise and never be able to leave.
+                    \newline
+    				\item[randomwalk] never really 'falls' in a local optimum
+                    as it never really tries to find them in the first place.
+                    If it stumble upon one it will just casually leave it
+                    unless it is really unlucky and keep going back in (which
+                    is unlikely but remains possible)\newline
+    				\item[randomized maxvalue] will have a choice of five
+                    moves to try to exit the local optimum, if one of the moves
+                    can lead to a better solution it will thus escape and
+                    otherwise it will forever fall back and try to find a way
+                    to exit.
+                \end{description}
     			\end{framed}
     	\end{enumerate}
 \end{enumerate}
 % Propositionnal logic
 \section{Propositional logic}
 \begin{enumerate}
-    \item For each instance below, give it's number of valid interpretations, i.e. the number of times the sentence is true (considering for each sentence all the proposition variables A, B , C an D).
+    \item For each instance below, give it's number of valid interpretations,
+    i.e. the number of times the sentence is true (considering for each
+    sentence all the proposition variables A, B , C an D).
     	\begin{enumerate}
     		\item $(A \wedge \lnot B) \vee (B \wedge \lnot C)$
     			\begin{framed}
@@ -101,21 +151,24 @@
     				Thus three valid interpretations
     			\end{framed}
     	\end{enumerate}
-    	
-    \item Explain how you can express this problem with propositional logic. What are the variables and how do you translate the relations and the query ? 
+
+    \item Explain how you can express this problem with propositional logic.
+    What are the variables and how do you translate the relations and the query ?
     	\begin{framed}
     		There are three type of variable:
     			\begin{enumerate}
-    				\item \textbf{Abilities} of which the set is denoted as 
+    				\item \textbf{Abilities} of which the set is denoted as
     				($A_1, A_2, A_3, ..., A_n$)
-    				\item \textbf{Equipments} of which the set is denoted as 
+    				\item \textbf{Equipments} of which the set is denoted as
     				($E_1, E_2, E_3, ..., E_n$)
-    				\item \textbf{Monsters} of which the set is denoted as 
+    				\item \textbf{Monsters} of which the set is denoted as
     				($M_1, M_2, M_3, ..., M_n$)
     			\end{enumerate}
     			\FloatBarrier
     			\vspace{5mm}
-    			Those variables are used to express the four relations which compose the problem, allowing us to make queries. The four relations are:
+    			Those variables are used to express the four relations which
+                compose the problem, allowing us to make queries. The four
+                relations are:
     			\vspace{5mm}
     			\begin{enumerate}
     				\item \textbf{Provides : } As Equipement grant abilities, possessing
@@ -128,7 +181,7 @@
     				Thus $A \Rightarrow E_1 \vee E_2 \vee ... \vee E_n$
     				\item \textbf{Conflicts : } As it is impossible to equip two conflicting
     				equipment, given an equipment E and ($E_1, E_2, E_3, ..., E_n$) the set
-    				of equipment it conflicts with, this relation can be translated as 
+    				of equipment it conflicts with, this relation can be translated as
     				$E \Rightarrow \lnot(E_1 \vee E_2 \vee ... \vee E_n)$
     				\item \textbf{Requires : } As Ennemies can only be beaten provided you
     				have the required n abilities ($A_1, A_2, A_3, ..., A_n$), this relation
@@ -137,7 +190,7 @@
     			\end{enumerate}
     			\vspace{5mm}
     			Thus as $((A \Rightarrow B) \wedge (C \Rightarrow D)) \Rightarrow
-    			((A \wedge C) \Rightarrow (B \wedge D))$ our model can be simply 
+    			((A \wedge C) \Rightarrow (B \wedge D))$ our model can be simply
     			expressed as : \newline
     			\FloatBarrier
     			$(M_1 \wedge ... \wedge M_a) \Rightarrow (A_1 \wedge ... \wedge
@@ -149,7 +202,7 @@
     			equipment which themselves render unequipable a set of D equipment which
     			conflict with the previous C.
     	\end{framed}
-    
+
     \item Translate your model into Conjonctive Normal Form (CNF) and write it in your report.
     	\begin{framed}
     		$(M_1 \wedge ... \wedge M_a) \Rightarrow (A_1 \wedge ... \wedge
@@ -157,47 +210,47 @@
     			(E_x \vee ... \vee E_y) \iff$\newline
     		Removing implication \newline
     		$\lnot(M_1 \wedge ... \wedge M_a) \vee (A_1 \wedge ... \wedge A_b)
-    		\Rightarrow (E_1 \wedge ... \wedge E_c)\Rightarrow \lnot(E_x \vee ... 
+    		\Rightarrow (E_1 \wedge ... \wedge E_c)\Rightarrow \lnot(E_x \vee ...
     		\vee E_y) \iff$\newline
     		Removing implication \newline
     		$\lnot(\lnot(M_1 \wedge ... \wedge M_a) \vee (A_1 \wedge ... \wedge A_b))
-    		\vee (E_1 \wedge ... \wedge E_c)\Rightarrow \lnot(E_x \vee ... 
+    		\vee (E_1 \wedge ... \wedge E_c)\Rightarrow \lnot(E_x \vee ...
     		\vee E_y) \iff$\newline
     		Removing implication \newline
     		$\lnot(\lnot(\lnot(M_1 \wedge ... \wedge M_a) \vee (A_1 \wedge ... \wedge A_b))
-    		\vee (E_1 \wedge ... \wedge E_c)) \vee \lnot(E_x \vee ... 
+    		\vee (E_1 \wedge ... \wedge E_c)) \vee \lnot(E_x \vee ...
     		\vee E_y) \iff$\newline
     		Simplification by removing leftmost negation \newline
     		$(\lnot(M_1 \wedge ... \wedge M_a) \vee (A_1 \wedge ... \wedge A_b)
-    		\wedge \lnot(E_1 \wedge ... \wedge E_c)) \vee \lnot(E_x \vee ... 
+    		\wedge \lnot(E_1 \wedge ... \wedge E_c)) \vee \lnot(E_x \vee ...
     		\vee E_y) \iff$\newline
     		Simplification by application of negation on parenthesis \newline
     		$((\lnot M_1 \vee ... \vee \lnot M_a) \vee (A_1 \wedge ... \wedge A_b)
-    		\wedge (\lnot E_1 \vee ... \vee \lnot E_c)) \vee (\lnot E_x \wedge ... 
+    		\wedge (\lnot E_1 \vee ... \vee \lnot E_c)) \vee (\lnot E_x \wedge ...
     		\wedge \lnot E_y) \iff$\newline
-    		Fusion of $(A_1 \wedge ... \wedge A_b)$ and $(\lnot E_1 \vee ... \vee 
+    		Fusion of $(A_1 \wedge ... \wedge A_b)$ and $(\lnot E_1 \vee ... \vee
     		\lnot E_c)$\newline
     		$((\lnot M_1 \vee ... \vee \lnot M_a) \vee (A_1 \wedge ... \wedge A_b
-    		\wedge (\lnot E_1 \vee ... \vee \lnot E_c))) \vee (\lnot E_x \wedge ... 
+    		\wedge (\lnot E_1 \vee ... \vee \lnot E_c))) \vee (\lnot E_x \wedge ...
     		\wedge \lnot E_y) \iff$\newline
     		Distribution of $(\lnot M_1 \vee ... \vee \lnot M_a)$\newline
-    		$((A_1 \vee \lnot M_1 \vee ... \vee \lnot M_a) \wedge ... \wedge (A_b \vee 
+    		$((A_1 \vee \lnot M_1 \vee ... \vee \lnot M_a) \wedge ... \wedge (A_b \vee
     		\lnot M_1 \vee ... \vee \lnot M_a) \wedge (\lnot E_1 \vee ... \vee \lnot E_c
-    		\vee \lnot M_1 \vee ... \vee \lnot M_a)) \vee (\lnot E_x \wedge ... 
+    		\vee \lnot M_1 \vee ... \vee \lnot M_a)) \vee (\lnot E_x \wedge ...
     		\wedge \lnot E_y) \iff$\newline
     		Distribution of $(\lnot E_x \wedge ... \wedge \lnot E_y)$\newline
-    		$(A_1 \vee \lnot M_1 \vee ... \vee \lnot M_a \vee (\lnot E_x \wedge ... 
-    		\wedge \lnot E_y)) \wedge ... \wedge (A_b \vee 
-    		\lnot M_1 \vee ... \vee \lnot M_a \vee (\lnot E_x \wedge ... 
+    		$(A_1 \vee \lnot M_1 \vee ... \vee \lnot M_a \vee (\lnot E_x \wedge ...
+    		\wedge \lnot E_y)) \wedge ... \wedge (A_b \vee
+    		\lnot M_1 \vee ... \vee \lnot M_a \vee (\lnot E_x \wedge ...
     		\wedge \lnot E_y)) \wedge (\lnot E_1 \vee ... \vee \lnot E_c
-    		\vee \lnot M_1 \vee ... \vee \lnot M_a \vee (\lnot E_x \wedge ... 
+    		\vee \lnot M_1 \vee ... \vee \lnot M_a \vee (\lnot E_x \wedge ...
     		\wedge \lnot E_y))$\newline
     		Simplification by distribution \newline
-    		$(\lnot E_x \vee A_1 \vee \lnot M_1 \vee ... \vee \lnot M_a) \wedge ... 
-    		\wedge (\lnot E_x \vee A_b \vee \lnot M_1 \vee ... \vee \lnot M_a) \wedge ... 
-    		\wedge (\lnot E_y \vee A_1 \vee \lnot M_1 \vee ... \vee \lnot M_a) \wedge ... 
-    		\wedge (\lnot E_y \vee A_b \vee \lnot M_1 \vee ... \vee \lnot M_a) 
-    		\wedge (\lnot E_x \vee \lnot E_1 \vee ... \vee \lnot E_c \vee \lnot M_1 
+    		$(\lnot E_x \vee A_1 \vee \lnot M_1 \vee ... \vee \lnot M_a) \wedge ...
+    		\wedge (\lnot E_x \vee A_b \vee \lnot M_1 \vee ... \vee \lnot M_a) \wedge ...
+    		\wedge (\lnot E_y \vee A_1 \vee \lnot M_1 \vee ... \vee \lnot M_a) \wedge ...
+    		\wedge (\lnot E_y \vee A_b \vee \lnot M_1 \vee ... \vee \lnot M_a)
+    		\wedge (\lnot E_x \vee \lnot E_1 \vee ... \vee \lnot E_c \vee \lnot M_1
     		\vee ... \vee \lnot M_a) \wedge ... \wedge (\lnot E_y \vee \lnot E_1 \vee ...
     		\vee \lnot E_c \vee \lnot M_1 \vee ... \vee \lnot M_a)$\newline
     	\end{framed}
