@@ -39,26 +39,17 @@ def get_clauses(merchant, level):
     return clauses
 
 
+
 def get_nb_vars(merchant, level):
     # nb_vars should be the number of different variables present in your list 'clauses'
     #
     # For example, if your clauses contain all the equipments proposed by merchant and
     # all the abilities provided by these equipment, you would have:
     # nb_vars = len(merchant.abilities) + len(merchant.equipments)
-    inventaire = []
-    # Pour toute habilité
+    indexes = []
     for ability_needed_name in level.ability_names:
-        ability_equips = []
         for equip in merchant.equipments:
-            # Pour tout item achetable
             if merchant.abi_map[ability_needed_name] in equip.provides:
-                # if item provides l'ability
-                ability_equips.append(equip)
-                # if item ne fait pas encore partie de l'equipement
-                if equip not in inventaire:
-                    inventaire.append(equip)
-                    # Insertion des conflits
-        # disjonction des items necessaires à satisfaire une habilité
-    nb_vars = len(set(inventaire))
-    print(repr(nb_vars))
-    return nb_vars
+                indexes.append(equip.index)
+                indexes.append(equip.conflicts.index)
+    return max(indexes)
